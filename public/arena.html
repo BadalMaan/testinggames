@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Global Super Hero — V6 Power Clash Arena</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@500;600;700;800;900&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .font-comic {
+      font-family: 'Bangers', Impact, cursive;
+      letter-spacing: 0.05em;
+    }
+
+    .font-display {
+      font-family: 'Orbitron', 'Inter', sans-serif;
+    }
+
+    /* Halftone comic accent for poster & headers */
+    .comic-halftone {
+      background-image: radial-gradient(rgba(15, 23, 42, 0.14) 1px, transparent 1px);
+      background-size: 8px 8px;
+    }
+
+    /* Power slot buttons (1 - 5) */
+    .power-slot-btn {
+      transition: transform 0.16s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.16s ease, border-color 0.16s ease, background-color 0.16s ease;
+    }
+
+    .power-slot-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px -6px rgba(15, 23, 42, 0.25);
+    }
+
+    .power-slot-btn:active:not(:disabled) {
+      transform: translateY(0px) scale(0.98);
+    }
+
+    .power-slot-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.42); }
+      50% { box-shadow: 0 0 0 8px rgba(37, 99, 235, 0); }
+    }
+
+    .attack-ready-pulse {
+      animation: pulseGlow 1.6s infinite;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  
+    #exitWebsiteDashboard {
+      position: fixed; z-index: 1000; top: 10px; left: 12px;
+      border: 1px solid #b9d7ef; border-radius: 11px; padding: 9px 13px;
+      background: rgba(255,255,255,.96); color: #16466c;
+      font: 900 10px/1.2 Inter, sans-serif; letter-spacing: .12em;
+      box-shadow: 0 5px 18px rgba(28,83,125,.16); cursor: pointer;
+    }
+    #exitWebsiteDashboard:hover { background:#e4f3ff; transform:translateY(-1px); }
+    @media(max-width:700px) { #exitWebsiteDashboard { top:6px; left:6px; padding:7px 9px; } }
+
+</style>
+
+<style id="light-arena-v4">
+  :root { color-scheme: light; }
+  body { background:#edf6ff !important; color:#163653 !important; }
+  #posterScreen { background:linear-gradient(135deg,#eaf6ff 0%,#ffffff 48%,#e9f2ff 100%) !important; }
+  #selectScreen, #arenaScreen { background:linear-gradient(145deg,#f8fcff,#eaf3ff 58%,#fff8f3) !important; }
+  #selectScreen header, #arenaScreen header, #arenaScreen footer {
+    border:1px solid #c8dcef !important; border-radius:20px !important;
+    box-shadow:0 12px 34px rgba(35,83,125,.10), inset 0 1px 0 #fff !important;
+  }
+  #arenaScreen main {
+    border:2px solid #a8d5f4 !important;
+    box-shadow:0 18px 45px rgba(45,105,153,.16), inset 0 1px 0 rgba(255,255,255,.9) !important;
+    background:#eaf6ff !important;
+  }
+  #selectScreen main > div:first-child {
+    background:linear-gradient(160deg,#fafdff,#e9f6ff) !important;
+    border-color:#72c7ff !important;
+    box-shadow:0 14px 35px rgba(35,130,200,.10) !important;
+  }
+  #selectScreen main > div:last-child {
+    background:linear-gradient(160deg,#fffdfb,#fff0eb) !important;
+    border-color:#ff9c83 !important;
+    box-shadow:0 14px 35px rgba(220,100,70,.10) !important;
+  }
+  button { transition:transform .18s ease, box-shadow .18s ease, filter .18s ease !important; }
+  button:not(:disabled):hover { transform:translateY(-2px); filter:saturate(1.12); }
+  #attackBtn:not(:disabled) {
+    min-width:142px; border:1px solid #1789d5 !important;
+    background:linear-gradient(135deg,#168fdf,#1766c8) !important;
+    box-shadow:0 8px 24px rgba(24,119,204,.30), inset 0 1px 0 rgba(255,255,255,.35) !important;
+    letter-spacing:.12em;
+  }
+  #attackBtn:disabled { opacity:.65; }
+  .power-slot-btn {
+    min-height:48px !important; border-radius:13px !important;
+    border:1px solid #c5d8e9 !important; background:linear-gradient(180deg,#fff,#f1f7fd) !important;
+    color:#163653 !important; box-shadow:0 3px 9px rgba(33,78,115,.06) !important;
+  }
+  .power-slot-btn:disabled { opacity:.78 !important; }
+  .power-slot-btn.border-blue-600 { background:linear-gradient(180deg,#e7f5ff,#cdeaff) !important; border:2px solid #1595e8 !important; }
+  #p2SlotsContainer .power-slot-btn.border-orange-600 { background:linear-gradient(180deg,#fff0e9,#ffd9ca) !important; border:2px solid #f47752 !important; }
+  input { box-shadow:inset 0 1px 3px rgba(30,64,90,.06) !important; }
+  .attack-ready-pulse { animation:readyPulseV4 1.05s infinite !important; }
+  @keyframes readyPulseV4 { 0%,100%{box-shadow:0 0 0 0 rgba(20,139,220,.28),0 8px 24px rgba(24,119,204,.3)} 50%{box-shadow:0 0 0 11px rgba(20,139,220,0),0 10px 28px rgba(24,119,204,.38)} }
+  @media(max-width:760px) {
+    #arenaScreen { padding:6px !important; }
+    #arenaScreen footer { padding:7px !important; }
+    .power-slot-btn { min-height:42px !important; }
+  }
+</style>
+
+
+<style id="blue-mountain-arena-v5">
+  body { background:#dcecff !important; color:#163b5d !important; }
+  #posterScreen { background:linear-gradient(140deg,#d9ecff,#f2f8ff 52%,#c8e0f5) !important; }
+  #selectScreen,#arenaScreen { background:linear-gradient(145deg,#e7f3ff,#d8e9f8 58%,#e4eff9) !important; }
+  #arenaScreen main { border-color:#78bde9 !important; box-shadow:0 18px 48px rgba(24,82,130,.18) !important; }
+  #arenaScreen header,#arenaScreen footer,#selectScreen header {
+    background:rgba(247,251,255,.94) !important; border-color:#b8d3e9 !important;
+    box-shadow:0 10px 28px rgba(25,75,118,.10) !important;
+  }
+  #attackBtn:not(:disabled) { background:linear-gradient(135deg,#168fdf,#1259b8) !important; box-shadow:0 8px 24px rgba(15,93,169,.35) !important; }
+</style>
+
+
+<style id="cinematic-power-clash-upgrade">
+  :root{--arena-glass:rgba(10,25,48,.72)}
+  #arenaScreen{background:radial-gradient(ellipse at 50% 0%,#d7efff 0%,#6d9ec1 55%,#183b5c 100%)!important}
+  #arenaScreen header,#arenaScreen footer{background:rgba(8,24,45,.82)!important;border:1px solid rgba(158,216,255,.38)!important;color:#eff8ff!important;box-shadow:0 14px 42px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.12)!important;backdrop-filter:blur(18px) saturate(1.35)}
+  #arenaScreen header span,#arenaScreen footer span{color:#eaf6ff!important}
+  #arenaScreen main{border:1px solid rgba(187,228,255,.55)!important;box-shadow:0 25px 65px rgba(3,19,38,.38),inset 0 1px rgba(255,255,255,.35)!important;background:#173c5b!important}
+  .power-inventory{position:absolute;z-index:8;top:12px;width:min(39%,440px);padding:8px 10px;border:1px solid rgba(255,255,255,.34);border-radius:15px;background:rgba(5,18,36,.60);backdrop-filter:blur(13px);box-shadow:0 10px 30px rgba(0,0,0,.20);color:white;pointer-events:none}
+  .power-inventory.left{left:12px}.power-inventory.right{right:12px;text-align:right}
+  .power-inventory strong{display:block;font:900 9px/1.2 Orbitron,sans-serif;letter-spacing:.18em;color:#bfe7ff;margin-bottom:6px}
+  .power-inventory .power-list{display:flex;gap:5px;flex-wrap:wrap}.power-inventory.right .power-list{justify-content:flex-end}
+  .power-chip{font:800 8px/1 Inter,sans-serif;padding:5px 7px;border-radius:999px;border:1px solid var(--pc);color:#fff;background:color-mix(in srgb,var(--pc) 26%,rgba(4,14,30,.8));box-shadow:inset 0 1px rgba(255,255,255,.18)}
+  #p1SlotsContainer,#p2SlotsContainer{padding:5px;border-radius:15px;background:rgba(20,45,72,.08);transition:background .35s,box-shadow .35s,transform .35s;}
+  #p1SlotsContainer.power-active,#p2SlotsContainer.power-active{background:color-mix(in srgb,var(--selected-power) 30%,rgba(4,17,35,.94));box-shadow:0 0 0 2px var(--selected-power),0 0 28px color-mix(in srgb,var(--selected-power) 62%,transparent);animation:powerPanelIgnite .55s ease-out both}
+  @keyframes powerPanelIgnite{0%{transform:scale(.94);filter:brightness(2)}65%{transform:scale(1.025)}100%{transform:scale(1);filter:brightness(1)}}
+  .power-slot-btn{min-height:54px!important;border-radius:12px!important;color:#f5fbff!important;background:linear-gradient(155deg,rgba(37,66,96,.95),rgba(8,25,48,.98))!important;border:1px solid rgba(173,218,250,.35)!important;box-shadow:inset 0 1px rgba(255,255,255,.12),0 5px 14px rgba(0,0,0,.16)!important}
+  .power-slot-btn.selected-power{background:linear-gradient(145deg,color-mix(in srgb,var(--selected-power) 85%,white),color-mix(in srgb,var(--selected-power) 65%,#071a30))!important;border:2px solid white!important;box-shadow:0 0 24px var(--selected-power)!important;transform:translateY(-4px) scale(1.035)!important}
+  .power-slot-btn .slot-number{font:900 17px Orbitron,sans-serif;color:#eaf6ff}
+  #attackBtn:not(:disabled){background:linear-gradient(135deg,#39c9ff,#1766d7)!important;box-shadow:0 0 25px rgba(47,177,255,.5),inset 0 1px rgba(255,255,255,.4)!important}
+  .power-slot-btn.rotating{animation:slotWheel .58s cubic-bezier(.2,.8,.2,1)}
+  @keyframes slotWheel{0%{transform:rotateY(0) scale(.92);opacity:.35}50%{transform:rotateY(180deg) scale(1.08);filter:brightness(1.8)}100%{transform:rotateY(360deg) scale(1);opacity:1}}
+  @media(max-width:700px){.power-inventory{top:7px;width:44%;padding:6px}.power-chip{font-size:6px;padding:4px}.power-inventory strong{font-size:7px}.power-slot-btn{min-height:43px!important}}
+</style>
+
+</head>
+<body class="w-screen h-dvh overflow-hidden bg-slate-100 text-slate-900 flex flex-col"><button id="exitWebsiteDashboard" type="button" aria-label="Return to website dashboard">← DASHBOARD</button>
+
+  <!-- ===================================================================== -->
+  <!-- SCREEN 1: COMIC-BOOK POSTER COVER                                     -->
+  <!-- ===================================================================== -->
+  <section id="posterScreen" class="hidden relative w-full h-full flex flex-col items-center justify-between p-3 sm:p-5 overflow-hidden bg-gradient-to-br from-sky-200 via-white to-amber-100">
+    <div class="absolute inset-0 comic-halftone pointer-events-none"></div>
+
+    <!-- Top Poster Badge -->
+    <div class="relative z-10 w-full max-w-6xl flex items-center justify-between gap-2 px-3 py-1.5 rounded-2xl bg-white/90 border border-slate-200 shadow-sm">
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-blue-600 text-white font-black text-xs shadow">&#9889;</span>
+        <span class="font-display text-[11px] sm:text-xs font-extrabold tracking-widest text-slate-800 uppercase">GLOBAL SUPER HERO</span>
+      </div>
+      <span class="text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">
+        1-SCREEN 2D CLASH
+      </span>
+    </div>
+
+    <!-- Center Poster Showcase -->
+    <div class="relative z-10 flex-1 w-full max-w-5xl my-2 rounded-3xl bg-white/85 backdrop-blur-md border-2 border-slate-200/90 shadow-2xl overflow-hidden flex flex-col items-center justify-between p-3 sm:p-5">
+      <div class="text-center">
+        <p class="font-display text-[10px] sm:text-xs font-extrabold tracking-[0.26em] text-blue-700 uppercase">
+          ELEMENTAL POWER TOURNAMENT
+        </p>
+        <h1 class="font-comic text-5xl sm:text-7xl leading-none text-slate-900 drop-shadow-sm mt-0.5">
+          GLOBAL SUPER HERO
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-600 font-medium mt-1">
+          Pick 1–5 mystery slots, lock your attack, and watch elemental powers collide on the sky terrace!
+        </p>
+      </div>
+
+      <!-- Live Poster Canvas Preview -->
+      <div class="relative w-full flex-1 min-h-0 my-2 rounded-2xl overflow-hidden border border-slate-200 shadow-inner bg-sky-100">
+        <canvas id="posterCanvas"></canvas>
+      </div>
+
+      <!-- Enter Button -->
+      <div class="flex items-center justify-center gap-3 w-full">
+        <button id="toSelectScreenBtn" type="button" class="px-7 sm:px-10 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-display font-black text-xs sm:text-sm tracking-widest uppercase shadow-lg transition cursor-pointer">
+          CHOOSE YOUR CHAMPIONS &rarr;
+        </button>
+      </div>
+    </div>
+
+    <div class="relative z-10 text-[11px] text-slate-500 font-medium">
+      Two players • Same screen • 0–100% Power Lines
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- SCREEN 2: CHAMPION & NAME SELECTION                                   -->
+  <!-- ===================================================================== -->
+  <section id="selectScreen" class="w-full h-full flex flex-col justify-between p-2.5 sm:p-4 overflow-hidden bg-slate-50">
+    <!-- Top Header Bar -->
+    <header class="w-full max-w-6xl mx-auto flex items-center justify-between gap-2 px-3 py-2 rounded-2xl bg-white border border-slate-200 shadow-sm shrink-0">
+      <button id="backToPosterBtn" type="button" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition cursor-pointer">
+        &larr; DASHBOARD
+      </button>
+      <div class="text-center">
+        <div class="font-display text-xs sm:text-sm font-black tracking-wider text-slate-900 uppercase">
+          &#9813; GLOBAL SUPER HERO
+        </div>
+        <div class="text-[10px] font-semibold tracking-widest text-slate-500 uppercase">
+          CHOOSE YOUR CHAMPIONS
+        </div>
+      </div>
+      <div class="px-2.5 py-1 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 font-bold text-[10px] sm:text-xs uppercase">
+        2 PLAYER CLASH
+      </div>
+    </header>
+
+    <!-- Main Two-Column Champion Cards -->
+    <main class="flex-1 min-h-0 w-full max-w-6xl mx-auto my-2 grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 items-stretch">
+      <!-- Player 1 Card -->
+      <div class="rounded-3xl bg-gradient-to-b from-sky-50/90 to-white border-2 border-sky-200 shadow-md p-3 sm:p-4 flex flex-col justify-between min-h-0">
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-extrabold tracking-widest text-sky-700 uppercase">PLAYER 1</span>
+          <span id="p1SuitBadge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800">NOVA</span>
+        </div>
+
+        <!-- Live P1 Preview Canvas -->
+        <div class="relative flex-1 min-h-[110px] my-1.5 rounded-2xl bg-gradient-to-b from-sky-100/70 to-white border border-sky-100 overflow-hidden">
+          <canvas id="p1PreviewCanvas"></canvas>
+        </div>
+
+        <!-- Editable Name + Quick Suit Pills -->
+        <div class="space-y-2 shrink-0">
+          <div>
+            <label for="p1NameInput" class="block text-[10px] font-bold tracking-wider text-slate-500 uppercase mb-1">
+              PLAYER 1 NAME
+            </label>
+            <input id="p1NameInput" type="text" maxlength="16" value="NOVA" placeholder="Enter Player 1 name..." class="w-full px-3 py-1.5 rounded-xl bg-white border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-200 outline-none font-display font-extrabold text-sm text-sky-900 uppercase transition" />
+          </div>
+          <div id="p1SuitPills" class="flex flex-wrap items-center justify-center gap-1.5"></div>
+        </div>
+      </div>
+
+      <!-- Player 2 Card -->
+      <div class="rounded-3xl bg-gradient-to-b from-orange-50/90 to-white border-2 border-orange-200 shadow-md p-3 sm:p-4 flex flex-col justify-between min-h-0">
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-extrabold tracking-widest text-orange-700 uppercase">PLAYER 2</span>
+          <span id="p2SuitBadge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-orange-100 text-orange-800">EMBER</span>
+        </div>
+
+        <!-- Live P2 Preview Canvas -->
+        <div class="relative flex-1 min-h-[110px] my-1.5 rounded-2xl bg-gradient-to-b from-orange-100/70 to-white border border-orange-100 overflow-hidden">
+          <canvas id="p2PreviewCanvas"></canvas>
+        </div>
+
+        <!-- Editable Name + Quick Suit Pills -->
+        <div class="space-y-2 shrink-0">
+          <div>
+            <label for="p2NameInput" class="block text-[10px] font-bold tracking-wider text-slate-500 uppercase mb-1">
+              PLAYER 2 NAME
+            </label>
+            <input id="p2NameInput" type="text" maxlength="16" value="EMBER" placeholder="Enter Player 2 name..." class="w-full px-3 py-1.5 rounded-xl bg-white border border-slate-300 focus:border-orange-600 focus:ring-2 focus:ring-orange-200 outline-none font-display font-extrabold text-sm text-orange-900 uppercase transition" />
+          </div>
+          <div id="p2SuitPills" class="flex flex-wrap items-center justify-center gap-1.5"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bottom Enter Arena Action -->
+    <footer class="w-full max-w-6xl mx-auto flex items-center justify-center shrink-0 pb-0.5">
+      <button id="enterArenaBtn" type="button" class="px-8 py-2.5 sm:py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-display font-black text-xs sm:text-sm tracking-widest uppercase shadow-lg transition cursor-pointer">
+        ENTER THE ARENA &#9876;
+      </button>
+    </footer>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- SCREEN 3: 1-SCREEN BATTLE ARENA                                       -->
+  <!-- ===================================================================== -->
+  <section id="arenaScreen" class="hidden w-full h-full flex-col justify-between p-2 sm:p-3 overflow-hidden bg-slate-100">
+    <!-- Top Power Lines & Round Bar -->
+    <header class="w-full max-w-7xl mx-auto grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4 px-2.5 py-1.5 rounded-2xl bg-white border border-slate-200 shadow-sm shrink-0">
+      <!-- Player 1 Power Line (0 - 100%) -->
+      <div class="min-w-0">
+        <div class="flex items-center justify-between text-[11px] sm:text-xs font-extrabold mb-1">
+          <span id="hudP1Name" class="font-display text-sky-900 truncate uppercase">NOVA</span>
+          <span id="hudP1PowerText" class="font-display text-sky-700 tabular-nums">100%</span>
+        </div>
+        <div class="w-full h-2.5 sm:h-3 rounded-full bg-slate-200 overflow-hidden border border-slate-300/80">
+          <div id="hudP1PowerBar" class="h-full bg-gradient-to-r from-sky-500 to-blue-600 transition-all duration-300" style="width: 100%;"></div>
+        </div>
+      </div>
+
+      <!-- Round & Exit -->
+      <div class="flex flex-col items-center justify-center px-2">
+        <span class="text-[9px] font-extrabold tracking-widest text-slate-400 uppercase">ROUND</span>
+        <span id="hudRoundNum" class="font-display text-base sm:text-lg font-black text-slate-900 leading-none">01</span>
+        <button id="exitArenaBtn" type="button" class="mt-1 text-[10px] font-bold text-slate-500 hover:text-slate-900 underline cursor-pointer">
+          EXIT
+        </button>
+      </div>
+
+      <!-- Player 2 Power Line (0 - 100%) -->
+      <div class="min-w-0">
+        <div class="flex items-center justify-between text-[11px] sm:text-xs font-extrabold mb-1">
+          <span id="hudP2PowerText" class="font-display text-orange-700 tabular-nums">100%</span>
+          <span id="hudP2Name" class="font-display text-orange-900 truncate uppercase">EMBER</span>
+        </div>
+        <div class="w-full h-2.5 sm:h-3 rounded-full bg-slate-200 overflow-hidden border border-slate-300/80 flex justify-end">
+          <div id="hudP2PowerBar" class="h-full bg-gradient-to-l from-orange-500 to-rose-600 transition-all duration-300" style="width: 100%;"></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Center Battle Canvas -->
+    <main class="relative flex-1 min-h-0 w-full max-w-7xl mx-auto my-1.5 rounded-3xl overflow-hidden border-2 border-slate-300 shadow-lg bg-sky-200">
+      <canvas id="battleCanvas"></canvas>
+      <div id="p1PowerInventory" class="power-inventory left"><strong>PLAYER 1 · POWER ARSENAL</strong><div class="power-list"></div></div>
+      <div id="p2PowerInventory" class="power-inventory right"><strong>PLAYER 2 · POWER ARSENAL</strong><div class="power-list"></div></div>
+
+      <!-- Subtle Status Pill (No explanations) -->
+      <div id="arenaStatusPill" class="hidden pointer-events-none absolute top-2.5 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-slate-900/80 text-white font-display text-[10px] sm:text-xs font-bold tracking-widest uppercase shadow z-10">
+        READY
+      </div>
+
+      <!-- Victory Celebration Overlay -->
+      <div id="victoryBanner" class="hidden absolute inset-0 bg-gradient-to-b from-slate-950/75 via-indigo-950/70 to-slate-950/85 backdrop-blur-md flex flex-col items-center justify-center p-4 text-center z-20">
+        <div class="px-4 py-1 rounded-full bg-amber-400/25 border border-amber-300/80 text-amber-200 font-display text-[11px] font-black tracking-[0.24em] uppercase mb-2 shadow-md">
+          &#9813; GRAND ARENA CHAMPION &#9813;
+        </div>
+        <h3 id="victoryWinnerName" class="font-comic text-4xl sm:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-300 to-orange-400 drop-shadow-[0_6px_18px_rgba(251,191,36,0.45)] uppercase">
+          NOVA WINS!
+        </h3>
+        <p id="victorySubtext" class="text-xs sm:text-sm text-sky-100 font-semibold mt-1.5 max-w-md">
+          Power Line supremacy achieved!
+        </p>
+        <div class="flex flex-wrap items-center justify-center gap-3 mt-5">
+          <button id="editNamesAfterWinBtn" type="button" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-300 via-orange-400 to-rose-500 text-slate-950 font-display font-black text-xs uppercase tracking-wider shadow-xl hover:brightness-110 transition transform hover:scale-105 cursor-pointer">
+            &#9998; NEW NAMES &amp; BATTLE
+          </button>
+          <button id="rematchBtn" type="button" class="px-5 py-2.5 rounded-xl bg-white/95 hover:bg-white text-slate-900 font-display font-bold text-xs uppercase tracking-wider shadow-xl transition transform hover:scale-105 cursor-pointer">
+            &#8635; REMATCH
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bottom 1-5 Mystery Slots + Simple Blue ATTACK! Button -->
+    <footer class="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] items-center gap-2 px-2.5 py-2 rounded-2xl bg-white border border-slate-200 shadow-sm shrink-0">
+      <!-- Player 1 Slots 1..5 -->
+      <div class="flex flex-col gap-1">
+        <div class="flex items-center justify-between text-[10px] font-extrabold tracking-wider text-sky-800 uppercase px-0.5">
+          <span id="p1SlotsLabel">PLAYER 1 — PICK 1–5</span>
+          <span id="p1LockBadge" class="text-slate-400">OPEN</span>
+        </div>
+        <div id="p1SlotsContainer" class="grid grid-cols-5 gap-1.5"></div>
+      </div>
+
+      <!-- Center Simple Blue ATTACK! Button -->
+      <div class="flex items-center justify-center px-1">
+        <button id="attackBtn" type="button" disabled class="px-6 py-2.5 sm:py-3 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:text-slate-500 text-white font-display font-black text-xs sm:text-sm tracking-widest uppercase shadow transition cursor-pointer disabled:cursor-not-allowed">
+          ATTACK!
+        </button>
+      </div>
+
+      <!-- Player 2 Slots 1..5 -->
+      <div class="flex flex-col gap-1">
+        <div class="flex items-center justify-between text-[10px] font-extrabold tracking-wider text-orange-800 uppercase px-0.5">
+          <span id="p2LockBadge" class="text-slate-400">OPEN</span>
+          <span id="p2SlotsLabel">PLAYER 2 — PICK 1–5</span>
+        </div>
+        <div id="p2SlotsContainer" class="grid grid-cols-5 gap-1.5"></div>
+      </div>
+    </footer>
+  </section>
+
+  <script>
+    // =========================================================================
+    // 1. SYNTHESIZED WEB AUDIO SOUND EFFECTS (NO EXTERNAL AUDIO ASSETS)
+    // =========================================================================
+    class ArenaSoundFX {
+      constructor() {
+        this.ctx = null;
+      }
+      ensure() {
+        if (!this.ctx) {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          if (AC) this.ctx = new AC();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume().catch(() => {});
+        }
+      }
+      playSelect(pitch = 520) {
+        this.ensure();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(pitch, now);
+        osc.frequency.exponentialRampToValueAtTime(pitch * 1.28, now + 0.09);
+        gain.gain.setValueAtTime(0.11, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.11);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.12);
+      }
+      playLaunch() {
+        this.ensure();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(160, now);
+        osc.frequency.exponentialRampToValueAtTime(640, now + 0.24);
+        gain.gain.setValueAtTime(0.13, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.26);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.27);
+      }
+      playClash() {
+        this.ensure();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(120, now);
+        osc.frequency.exponentialRampToValueAtTime(48, now + 0.35);
+        gain.gain.setValueAtTime(0.16, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.36);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.38);
+      }
+      playDraw() {
+        this.ensure();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        [330, 293.66].forEach((freq, idx) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+          gain.gain.setValueAtTime(0.11, now + idx * 0.12);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.12 + 0.18);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now + idx * 0.12);
+          osc.stop(now + idx * 0.12 + 0.2);
+        });
+      }
+      playWinFanfare() {
+        this.ensure();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + i * 0.11);
+          gain.gain.setValueAtTime(0.13, now + i * 0.11);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.11 + 0.28);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now + i * 0.11);
+          osc.stop(now + i * 0.11 + 0.3);
+        });
+      }
+    }
+    const sfx = new ArenaSoundFX();
+
+    // =========================================================================
+    // 2. HERO SUITS, SIMPLE POWER NAMES & ELEMENTAL MATCHUP LOGIC
+    // =========================================================================
+    const HERO_SUITS = [
+      {
+        id: 'nova',
+        label: 'NOVA',
+        archetype: 'LIGHTNING VANGUARD',
+        capeColor: '#1d4ed8',
+        suitPrimary: '#2563eb',
+        suitSecondary: '#0ea5e9',
+        armorPlate: '#e2e8f0',
+        skinTone: '#f1c29b',
+        hairColor: '#3b2314',
+        visorColor: '#38bdf8'
+      },
+      {
+        id: 'volt',
+        label: 'VOLT',
+        archetype: 'STORM STRIKER',
+        capeColor: '#0284c7',
+        suitPrimary: '#0369a1',
+        suitSecondary: '#38bdf8',
+        armorPlate: '#f8fafc',
+        skinTone: '#e8b38a',
+        hairColor: '#1e293b',
+        visorColor: '#7dd3fc'
+      },
+      {
+        id: 'frost',
+        label: 'FROST',
+        archetype: 'CRYO WARDEN',
+        capeColor: '#0f766e',
+        suitPrimary: '#0d9488',
+        suitSecondary: '#67e8f9',
+        armorPlate: '#f0f9ff',
+        skinTone: '#f5cba7',
+        hairColor: '#475569',
+        visorColor: '#a5f3fc'
+      },
+      {
+        id: 'ember',
+        label: 'EMBER',
+        archetype: 'BLAZE CHAMPION',
+        capeColor: '#b91c1c',
+        suitPrimary: '#dc2626',
+        suitSecondary: '#f97316',
+        armorPlate: '#fde68a',
+        skinTone: '#eab68c',
+        hairColor: '#451a03',
+        visorColor: '#fbbf24'
+      },
+      {
+        id: 'hex',
+        label: 'HEX',
+        archetype: 'PLASMA DUELIST',
+        capeColor: '#7e22ce',
+        suitPrimary: '#9333ea',
+        suitSecondary: '#ec4899',
+        armorPlate: '#f3e8ff',
+        skinTone: '#e0a980',
+        hairColor: '#1f2937',
+        visorColor: '#f472b6'
+      },
+      {
+        id: 'solis',
+        label: 'SOLIS',
+        archetype: 'SOLAR TITAN',
+        capeColor: '#d97706',
+        suitPrimary: '#ea580c',
+        suitSecondary: '#facc15',
+        armorPlate: '#fef3c7',
+        skinTone: '#d99b6c',
+        hairColor: '#292524',
+        visorColor: '#fde047'
+      }
+    ];
+
+    const POWER_ARSENAL = [
+      { id: 'fire', name: 'FIRE', icon: '🔥', color: '#f97316', primary: '#ea580c', core: '#fef08a', strength: 78, style: 'fire' },
+      { id: 'water', name: 'WATER', icon: '💧', color: '#0ea5e9', primary: '#0284c7', core: '#e0f2fe', strength: 82, style: 'water' },
+      { id: 'thunder', name: 'THUNDER', icon: '⚡', color: '#eab308', primary: '#ca8a04', core: '#ffffff', strength: 86, style: 'thunder' },
+      { id: 'frost', name: 'FROST', icon: '❄️', color: '#06b6d4', primary: '#0891b2', core: '#ecfeff', strength: 76, style: 'frost' },
+      { id: 'wind', name: 'WIND', icon: '🌪️', color: '#10b981', primary: '#059669', core: '#ecfdf5', strength: 75, style: 'wind' },
+      { id: 'plasma', name: 'PLASMA', icon: '🔮', color: '#d946ef', primary: '#a21caf', core: '#fae8ff', strength: 84, style: 'plasma' },
+      { id: 'shadow', name: 'SHADOW', icon: '🌑', color: '#6366f1', primary: '#4338ca', core: '#e0e7ff', strength: 80, style: 'shadow' },
+      { id: 'shield', name: 'SHIELD', icon: '🛡️', color: '#3b82f6', primary: '#1d4ed8', core: '#dbeafe', strength: 74, style: 'shield' },
+      { id: 'megapower', name: 'MEGAPOWER', icon: '💥', color: '#c084fc', primary: '#7e22ce', core: '#f5d0fe', strength: 100, style: 'megapower' },
+      { id: 'phoenix', name: 'PHOENIX', icon: '🦅', color: '#f43f5e', primary: '#e11d48', core: '#fef08a', strength: 88, style: 'phoenix' },
+      { id: 'solar', name: 'SOLAR', icon: '☀️', color: '#f59e0b', primary: '#d97706', core: '#ffffff', strength: 90, style: 'solar' },
+      { id: 'earth', name: 'EARTH', icon: '🌋', color: '#a3a3a3', primary: '#57534e', core: '#fef3c7', strength: 80, style: 'earth' }
+    ];
+
+    // Logical Elemental Matchup Map:
+    // - Same power vs same power => 0 (no one wins, draw)
+    // - Water beats Fire (water controls fire)
+    // - Thunder beats Phoenix (thunder strikes down phoenix)
+    // - Phoenix beats Water (phoenix crosses/vaporizes water)
+    // - Additional balanced elemental counters across the roster
+    const ELEMENT_ADVANTAGES = {
+      water: ['fire', 'solar'],
+      fire: ['frost', 'wind'],
+      thunder: ['phoenix', 'plasma'],
+      phoenix: ['water', 'frost', 'shadow'],
+      frost: ['thunder', 'wind'],
+      solar: ['shadow', 'frost', 'phoenix'],
+      wind: ['thunder', 'plasma'],
+      plasma: ['shield', 'frost', 'fire'],
+      shadow: ['thunder', 'wind', 'shield'],
+      shield: ['fire', 'frost', 'wind']
+    };
+
+    function resolveElementalClash(pw1, pw2) {
+      // No power-strength or elemental-counter auto-winner: both attacks meet at centre.
+      return (pw1 && pw2) ? 1 : 0;
+    }
+
+    // =========================================================================
+    // 3. GAME STATE & DOM REFERENCES
+    // =========================================================================
+    const posterScreen = document.getElementById('posterScreen');
+    const selectScreen = document.getElementById('selectScreen');
+    const arenaScreen = document.getElementById('arenaScreen');
+
+    const toSelectScreenBtn = document.getElementById('toSelectScreenBtn');
+    const backToPosterBtn = document.getElementById('backToPosterBtn');
+    const enterArenaBtn = document.getElementById('enterArenaBtn');
+    const exitArenaBtn = document.getElementById('exitArenaBtn');
+    const attackBtn = document.getElementById('attackBtn');
+
+    document.getElementById('exitWebsiteDashboard').addEventListener('click', () => {
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'GPA_EXIT_ARENA' }, window.location.origin);
+      } else {
+        window.location.href = '/';
+      }
+    });
+
+
+    const p1NameInput = document.getElementById('p1NameInput');
+    const p2NameInput = document.getElementById('p2NameInput');
+    const p1SuitPills = document.getElementById('p1SuitPills');
+    const p2SuitPills = document.getElementById('p2SuitPills');
+    const p1SuitBadge = document.getElementById('p1SuitBadge');
+    const p2SuitBadge = document.getElementById('p2SuitBadge');
+
+    const hudP1Name = document.getElementById('hudP1Name');
+    const hudP2Name = document.getElementById('hudP2Name');
+    const hudP1PowerText = document.getElementById('hudP1PowerText');
+    const hudP2PowerText = document.getElementById('hudP2PowerText');
+    const hudP1PowerBar = document.getElementById('hudP1PowerBar');
+    const hudP2PowerBar = document.getElementById('hudP2PowerBar');
+    const hudRoundNum = document.getElementById('hudRoundNum');
+    const arenaStatusPill = document.getElementById('arenaStatusPill');
+
+    const p1SlotsContainer = document.getElementById('p1SlotsContainer');
+    const p2SlotsContainer = document.getElementById('p2SlotsContainer');
+    const p1LockBadge = document.getElementById('p1LockBadge');
+    const p2LockBadge = document.getElementById('p2LockBadge');
+
+    const victoryBanner = document.getElementById('victoryBanner');
+    const victoryWinnerName = document.getElementById('victoryWinnerName');
+    const victorySubtext = document.getElementById('victorySubtext');
+    const editNamesAfterWinBtn = document.getElementById('editNamesAfterWinBtn');
+    const rematchBtn = document.getElementById('rematchBtn');
+
+    const posterCanvas = document.getElementById('posterCanvas');
+    const p1PreviewCanvas = document.getElementById('p1PreviewCanvas');
+    const p2PreviewCanvas = document.getElementById('p2PreviewCanvas');
+    const battleCanvas = document.getElementById('battleCanvas');
+
+    const game = {
+      screen: 'SELECT', // Website dashboard poster -> SELECT -> ARENA
+      phase: 'PICKING', // PICKING | READY_TO_ATTACK | CHARGING | TRAVEL_TO_CENTER | CENTER_CLASH | SURGE_HIT | DRAW_PULSE | VICTORY
+      round: 1,
+      winner: 0,
+      time: 0,
+      shake: 0,
+      hitStop: 0,
+      p1: {
+        name: 'NOVA',
+        suitId: 'nova',
+        hero: HERO_SUITS[0],
+        power: 100,
+        slots: [],
+        pickedIndex: null,
+        pickedPower: null,
+        anim: 'idle',
+        hurtTimer: 0,
+        recoilX: 0
+      },
+      p2: {
+        name: 'EMBER',
+        suitId: 'ember',
+        hero: HERO_SUITS[3],
+        power: 100,
+        slots: [],
+        pickedIndex: null,
+        pickedPower: null,
+        anim: 'idle',
+        hurtTimer: 0,
+        recoilX: 0
+      },
+      clash: {
+        timer: 0,
+        p1Reach: 0,
+        p2Reach: 0,
+        clashXRatio: 0.5,
+        winnerSide: 0,
+        drainAmount: 0,
+        appliedDamage: false,
+        surgeProgress: 0
+      }
+    };
+
+    let vfxParticles = [];
+    let shockRings = [];
+
+    // =========================================================================
+    // 4. SCREEN NAVIGATION & CHAMPION SELECTION
+    // =========================================================================
+    function showScreen(target) {
+      game.screen = target;
+      posterScreen.classList.toggle('hidden', target !== 'POSTER');
+      posterScreen.classList.toggle('flex', target === 'POSTER');
+
+      selectScreen.classList.toggle('hidden', target !== 'SELECT');
+      selectScreen.classList.toggle('flex', target === 'SELECT');
+
+      arenaScreen.classList.toggle('hidden', target !== 'ARENA');
+      arenaScreen.classList.toggle('flex', target === 'ARENA');
+
+      requestAnimationFrame(resizeAllCanvases);
+    }
+
+    function buildSuitPills() {
+      p1SuitPills.innerHTML = '';
+      p2SuitPills.innerHTML = '';
+
+      HERO_SUITS.forEach((suit) => {
+        const b1 = document.createElement('button');
+        b1.type = 'button';
+        b1.textContent = suit.label;
+        b1.className = 'px-2.5 py-1 rounded-lg text-[10px] font-display font-bold border transition cursor-pointer';
+        b1.addEventListener('click', () => {
+          sfx.playSelect(480);
+          game.p1.suitId = suit.id;
+          game.p1.hero = suit;
+          refreshSuitSelectionUI();
+        });
+        p1SuitPills.appendChild(b1);
+
+        const b2 = document.createElement('button');
+        b2.type = 'button';
+        b2.textContent = suit.label;
+        b2.className = 'px-2.5 py-1 rounded-lg text-[10px] font-display font-bold border transition cursor-pointer';
+        b2.addEventListener('click', () => {
+          sfx.playSelect(560);
+          game.p2.suitId = suit.id;
+          game.p2.hero = suit;
+          refreshSuitSelectionUI();
+        });
+        p2SuitPills.appendChild(b2);
+      });
+
+      refreshSuitSelectionUI();
+    }
+
+    function refreshSuitSelectionUI() {
+      p1SuitBadge.textContent = game.p1.hero.label;
+      p2SuitBadge.textContent = game.p2.hero.label;
+
+      [...p1SuitPills.children].forEach((btn) => {
+        const active = btn.textContent === game.p1.hero.label;
+        btn.className = active
+          ? 'px-2.5 py-1 rounded-lg text-[10px] font-display font-extrabold border border-blue-600 bg-blue-600 text-white shadow-sm cursor-pointer'
+          : 'px-2.5 py-1 rounded-lg text-[10px] font-display font-bold border border-slate-200 bg-white text-slate-700 hover:bg-sky-50 cursor-pointer';
+      });
+
+      [...p2SuitPills.children].forEach((btn) => {
+        const active = btn.textContent === game.p2.hero.label;
+        btn.className = active
+          ? 'px-2.5 py-1 rounded-lg text-[10px] font-display font-extrabold border border-orange-600 bg-orange-600 text-white shadow-sm cursor-pointer'
+          : 'px-2.5 py-1 rounded-lg text-[10px] font-display font-bold border border-slate-200 bg-white text-slate-700 hover:bg-orange-50 cursor-pointer';
+      });
+    }
+
+    function syncNamesFromInputs() {
+      const n1 = (p1NameInput.value || '').trim().toUpperCase() || 'PLAYER 1';
+      const n2 = (p2NameInput.value || '').trim().toUpperCase() || 'PLAYER 2';
+      game.p1.name = n1;
+      game.p2.name = n2;
+      hudP1Name.textContent = n1;
+      hudP2Name.textContent = n2;
+      document.querySelector('#p1PowerInventory strong').textContent = `${n1} · POWER ARSENAL`;
+      document.querySelector('#p2PowerInventory strong').textContent = `${n2} · POWER ARSENAL`;
+    }
+
+    // =========================================================================
+    // 5. ROUND ROLL, 1-5 SLOTS & ATTACK TRIGGER
+    // =========================================================================
+    const PLAYER_POWER_SETS = {
+      1: ['fire','shield','megapower','thunder','phoenix'],
+      2: ['water','shield','megapower','frost','wind']
+    };
+    function rollFivePowers(playerNum) {
+      const ids = PLAYER_POWER_SETS[playerNum];
+      const rotation = (game.round - 1) % ids.length;
+      const rotated = ids.slice(rotation).concat(ids.slice(0, rotation));
+      return rotated.map(id => POWER_ARSENAL.find(power => power.id === id)).filter(Boolean);
+    }
+    function renderPowerInventories(){
+      [1,2].forEach(n=>{
+        const p=n===1?game.p1:game.p2;
+        const root=document.querySelector(`#p${n}PowerInventory .power-list`);
+        if(!root)return;
+        root.innerHTML=PLAYER_POWER_SETS[n].map(id=>{
+          const pw=POWER_ARSENAL.find(x=>x.id===id);
+          return `<span class="power-chip" style="--pc:${pw.color}">${pw.icon} ${pw.name}</span>`;
+        }).join('');
+      });
+    }
+
+    function startNewRound(resetPowers = false) {
+      if (resetPowers) {
+        game.p1.power = 100;
+        game.p2.power = 100;
+        game.round = 1;
+        game.winner = 0;
+        victoryBanner.classList.add('hidden');
+      }
+
+      game.phase = 'PICKING';
+      game.p1.slots = rollFivePowers(1);
+      game.p2.slots = rollFivePowers(2);
+      renderPowerInventories();
+      game.p1.pickedIndex = null;
+      game.p2.pickedIndex = null;
+      game.p1.pickedPower = null;
+      game.p2.pickedPower = null;
+      game.p1.anim = 'idle';
+      game.p2.anim = 'idle';
+      game.p1.recoilX = 0;
+      game.p2.recoilX = 0;
+
+      game.clash.timer = 0;
+      game.clash.p1Reach = 0;
+      game.clash.p2Reach = 0;
+      game.clash.winnerSide = 0;
+      game.clash.drainAmount = 0;
+      game.clash.appliedDamage = false;
+      game.clash.surgeProgress = 0;
+
+      vfxParticles = [];
+      shockRings = [];
+
+      hudRoundNum.textContent = String(game.round).padStart(2, '0');
+      updatePowerLinesHUD();
+      renderSlotButtons();
+      [...p1SlotsContainer.children,...p2SlotsContainer.children].forEach((el,i)=>{el.classList.add('rotating');el.style.animationDelay=`${(i%5)*35}ms`;});
+      updateAttackButtonState();
+      setStatusPill(`ROUND ${String(game.round).padStart(2, '0')} — PICK 1–5`, true);
+    }
+
+    function setStatusPill(text, show = true) {
+      arenaStatusPill.textContent = text;
+      arenaStatusPill.classList.toggle('hidden', !show);
+    }
+
+    function updatePowerLinesHUD() {
+      const p1Pct = Math.max(0, Math.min(100, Math.round(game.p1.power)));
+      const p2Pct = Math.max(0, Math.min(100, Math.round(game.p2.power)));
+      hudP1PowerText.textContent = `${p1Pct}%`;
+      hudP2PowerText.textContent = `${p2Pct}%`;
+      hudP1PowerBar.style.width = `${p1Pct}%`;
+      hudP2PowerBar.style.width = `${p2Pct}%`;
+    }
+
+    function renderSlotButtons() {
+      p1SlotsContainer.innerHTML = ''; p2SlotsContainer.innerHTML = '';
+      const canPick = game.phase === 'PICKING';
+      [1,2].forEach(playerNum=>{
+        const p=playerNum===1?game.p1:game.p2;
+        const container=playerNum===1?p1SlotsContainer:p2SlotsContainer;
+        container.classList.toggle('power-active',p.pickedPower!==null);
+        if(p.pickedPower) container.style.setProperty('--selected-power',p.pickedPower.color);
+        else container.style.removeProperty('--selected-power');
+        for(let i=0;i<5;i++){
+          const pw=p.slots[i], selected=p.pickedIndex===i;
+          const btn=document.createElement('button');btn.type='button';btn.disabled=!canPick;
+          btn.className='power-slot-btn py-2 px-1 rounded-xl border font-display font-black text-xs flex flex-col items-center justify-center cursor-pointer '+(selected?'selected-power':'');
+          if(selected){btn.style.setProperty('--selected-power',pw.color);btn.innerHTML=`<span class="text-lg leading-none">${pw.icon}</span><span class="mt-1 text-[9px]">${pw.name}</span>`;}
+          else btn.innerHTML=`<span class="slot-number">${i+1}</span><span class="text-[8px] tracking-widest opacity-65 mt-1">POWER</span>`;
+          btn.addEventListener('click',()=>handleSlotPick(playerNum,i));container.appendChild(btn);
+        }
+      });
+      p1LockBadge.textContent=game.p1.pickedIndex!==null?'SELECTED':'OPEN';
+      p2LockBadge.textContent=game.p2.pickedIndex!==null?'SELECTED':'OPEN';
+    }
+
+    function handleSlotPick(playerNum, slotIndex) {
+      if (game.phase !== 'PICKING') return;
+      const p = playerNum === 1 ? game.p1 : game.p2;
+      const chosen = p.slots[slotIndex];
+      if (!chosen) return;
+
+      p.pickedIndex = slotIndex;
+      p.pickedPower = chosen;
+      sfx.playSelect(playerNum === 1 ? 500 : 600);
+
+      renderSlotButtons();
+      updateAttackButtonState();
+    }
+
+    function updateAttackButtonState() {
+      const bothReady =
+        game.phase === 'PICKING' &&
+        game.p1.pickedPower !== null &&
+        game.p2.pickedPower !== null;
+
+      if (bothReady) {
+        game.phase = 'READY_TO_ATTACK';
+        attackBtn.disabled = false;
+        attackBtn.classList.add('attack-ready-pulse');
+        setStatusPill('BOTH READY — PRESS ATTACK!', true);
+      } else if (game.phase === 'PICKING') {
+        attackBtn.disabled = true;
+        attackBtn.classList.remove('attack-ready-pulse');
+      }
+    }
+
+    function triggerAttack() {
+      if (game.phase !== 'READY_TO_ATTACK') return;
+      const pw1 = game.p1.pickedPower;
+      const pw2 = game.p2.pickedPower;
+      if (!pw1 || !pw2) return;
+
+      attackBtn.disabled = true;
+      attackBtn.classList.remove('attack-ready-pulse');
+
+      game.phase = 'CHARGING';
+      game.p1.anim = 'cast';
+      game.p2.anim = 'cast';
+      game.clash.timer = 0;
+      game.clash.p1Reach = 0;
+      game.clash.p2Reach = 0;
+      game.clash.appliedDamage = false;
+      game.clash.surgeProgress = 0;
+
+      const outcome = resolveElementalClash(pw1, pw2);
+      game.clash.winnerSide = outcome;
+
+      game.clash.clashXRatio = 0.5;
+      game.clash.drainAmount = 0; // damage is calculated simultaneously after the centre collision
+
+      sfx.playSelect(760);
+      setStatusPill(`${pw1.name}  VS  ${pw2.name} — CHARGING`, true);
+    }
+
+    // =========================================================================
+    // 6. REALISTIC 2D HERO RENDERER (ATHLETIC PROPORTIONS, ARMOR & CAPE)
+    // =========================================================================
+    function drawRealisticHero(ctx, cx, groundY, scale, facing, hero, animState, time, hurtTimer, recoilX) {
+      ctx.save();
+      const sway = Math.sin(time * 3.4) * 2.2;
+      const breath = Math.cos(time * 3.4) * 1.8;
+      const shakeOffset = hurtTimer > 0 ? Math.sin(time * 55) * 6 : 0;
+
+      ctx.translate(cx + recoilX + shakeOffset, groundY);
+      ctx.scale(facing * scale, scale);
+
+      // Ground contact shadow
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.28)';
+      ctx.beginPath();
+      ctx.ellipse(0, 4, 48, 11, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Flowing Cloth Cape behind back
+      const capeWave = Math.sin(time * 5.2) * 8 + (animState === 'cast' ? -10 : 0);
+      const capeGrad = ctx.createLinearGradient(-12, -118, -56, -12);
+      capeGrad.addColorStop(0, hero.capeColor);
+      capeGrad.addColorStop(1, '#0f172a');
+      ctx.fillStyle = capeGrad;
+      ctx.beginPath();
+      ctx.moveTo(-10, -116 + breath);
+      ctx.quadraticCurveTo(-48 + capeWave * 0.5, -72, -58 + capeWave, -14);
+      ctx.lineTo(-22 + capeWave * 0.6, -24);
+      ctx.lineTo(-4, -102 + breath);
+      ctx.closePath();
+      ctx.fill();
+
+      // Back Leg & Boot
+      ctx.fillStyle = '#1e293b';
+      ctx.beginPath();
+      ctx.moveTo(-14, -56);
+      ctx.lineTo(-28, -8);
+      ctx.lineTo(-10, -8);
+      ctx.lineTo(2, -56);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = hero.suitPrimary;
+      ctx.fillRect(-30, -16, 22, 16);
+
+      // Front Leg & Sculpted Greave
+      ctx.fillStyle = '#0f172a';
+      ctx.beginPath();
+      ctx.moveTo(4, -56);
+      ctx.lineTo(22, -8);
+      ctx.lineTo(40, -8);
+      ctx.lineTo(22, -56);
+      ctx.closePath();
+      ctx.fill();
+
+      const legGrad = ctx.createLinearGradient(6, -54, 34, -10);
+      legGrad.addColorStop(0, hero.suitPrimary);
+      legGrad.addColorStop(1, hero.suitSecondary);
+      ctx.fillStyle = legGrad;
+      ctx.beginPath();
+      ctx.moveTo(6, -52);
+      ctx.lineTo(18, -14);
+      ctx.lineTo(34, -14);
+      ctx.lineTo(22, -52);
+      ctx.closePath();
+      ctx.fill();
+
+      // Athletic Torso & Chest Armor
+      const torsoGrad = ctx.createLinearGradient(-22, -116, 24, -54);
+      torsoGrad.addColorStop(0, hero.suitPrimary);
+      torsoGrad.addColorStop(0.6, hero.suitSecondary);
+      torsoGrad.addColorStop(1, '#0f172a');
+      ctx.fillStyle = torsoGrad;
+      ctx.beginPath();
+      ctx.moveTo(-27, -116 + breath);
+      ctx.lineTo(27, -116 + breath);
+      ctx.lineTo(19, -56);
+      ctx.lineTo(-19, -56);
+      ctx.closePath();
+      ctx.fill();
+
+      // Chest Emblem Highlight
+      ctx.fillStyle = hero.visorColor;
+      ctx.beginPath();
+      ctx.moveTo(4, -102 + breath);
+      ctx.lineTo(15, -92 + breath);
+      ctx.lineTo(4, -81 + breath);
+      ctx.lineTo(-4, -92 + breath);
+      ctx.closePath();
+      ctx.fill();
+
+      // Front Arm & Power Gauntlet (extends forward when casting)
+      const armReach = animState === 'cast' ? 28 : (animState === 'win' ? 14 : 4);
+      const armLift = animState === 'cast' ? -10 : (animState === 'win' ? -24 : sway * 0.4);
+      ctx.strokeStyle = hero.suitPrimary;
+      ctx.lineWidth = 17;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(14, -108 + breath);
+      ctx.lineTo(30 + armReach * 0.5, -82 + armLift);
+      ctx.lineTo(38 + armReach, -68 + armLift);
+      ctx.stroke();
+
+      // Gauntlet
+      ctx.fillStyle = hero.armorPlate;
+      ctx.beginPath();
+      ctx.arc(38 + armReach, -68 + armLift, 12, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Broad shoulder armour gives the champions a stronger superhero silhouette.
+      const shoulderGrad=ctx.createLinearGradient(-36,-112,36,-88);
+      shoulderGrad.addColorStop(0,hero.armorPlate); shoulderGrad.addColorStop(.45,hero.suitSecondary); shoulderGrad.addColorStop(1,hero.suitPrimary);
+      ctx.fillStyle=shoulderGrad;
+      ctx.beginPath();ctx.moveTo(-27,-113);ctx.lineTo(-42,-103);ctx.lineTo(-34,-86);ctx.lineTo(-17,-91);ctx.lineTo(-15,-108);ctx.closePath();ctx.fill();
+      ctx.beginPath();ctx.moveTo(22,-113);ctx.lineTo(39,-103);ctx.lineTo(31,-86);ctx.lineTo(15,-91);ctx.lineTo(14,-108);ctx.closePath();ctx.fill();
+
+      // Head & Sculpted Hair / Visor
+      const headY = -132 + breath;
+      ctx.fillStyle = hero.skinTone;
+      ctx.beginPath();
+      ctx.arc(4, headY, 13.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Glowing Visor / Mask
+      ctx.fillStyle = hero.visorColor;
+      ctx.beginPath();
+      ctx.roundRect(4, headY - 4, 14, 6.5, 3);
+      ctx.fill();
+
+      // Styled Hair Crest
+      ctx.fillStyle = hero.hairColor;
+      ctx.beginPath();
+      ctx.moveTo(-10, headY - 2);
+      ctx.quadraticCurveTo(-8, headY - 19, 8, headY - 17);
+      ctx.lineTo(18, headY - 12);
+      ctx.lineTo(10, headY - 7);
+      ctx.lineTo(-2, headY - 9);
+      ctx.closePath();
+      ctx.fill();
+
+      // Layered specular armour details: bevels, panel seams and metallic hardware.
+      ctx.save();
+      ctx.lineJoin = 'round';
+      ctx.shadowColor = 'rgba(2,12,28,.48)'; ctx.shadowBlur = 9; ctx.shadowOffsetY = 3;
+      const chestPlate = ctx.createLinearGradient(-17,-111,18,-78);
+      chestPlate.addColorStop(0,'rgba(255,255,255,.58)');
+      chestPlate.addColorStop(.22,hero.armorPlate);
+      chestPlate.addColorStop(.72,hero.suitSecondary);
+      chestPlate.addColorStop(1,'rgba(4,18,35,.78)');
+      ctx.fillStyle=chestPlate;
+      ctx.beginPath();ctx.moveTo(-16,-108+breath);ctx.lineTo(17,-108+breath);ctx.lineTo(12,-79+breath);ctx.lineTo(0,-73+breath);ctx.lineTo(-12,-79+breath);ctx.closePath();ctx.fill();
+      ctx.shadowBlur=0;ctx.shadowOffsetY=0;
+      ctx.strokeStyle='rgba(255,255,255,.48)';ctx.lineWidth=1.5;
+      ctx.beginPath();ctx.moveTo(-12,-103+breath);ctx.lineTo(-8,-84+breath);ctx.moveTo(12,-103+breath);ctx.lineTo(8,-84+breath);ctx.stroke();
+      // Segmented abdominal armour and illuminated energy seams.
+      ctx.strokeStyle='rgba(3,18,37,.58)';ctx.lineWidth=2;
+      [-72,-82].forEach(y=>{ctx.beginPath();ctx.moveTo(-12,y+breath);ctx.quadraticCurveTo(0,y+4+breath,12,y+breath);ctx.stroke();});
+      ctx.strokeStyle=hero.visorColor;ctx.globalAlpha=.82;ctx.lineWidth=1.4;
+      ctx.beginPath();ctx.moveTo(-8,-77+breath);ctx.lineTo(8,-77+breath);ctx.stroke();ctx.globalAlpha=1;
+      // Metallic belt and centre core.
+      const belt=ctx.createLinearGradient(0,-62,0,-53);belt.addColorStop(0,'#f8fafc');belt.addColorStop(.5,hero.armorPlate);belt.addColorStop(1,'#64748b');
+      ctx.fillStyle=belt;ctx.fillRect(-19,-63,38,7);
+      ctx.fillStyle=hero.visorColor;ctx.beginPath();ctx.roundRect(-4,-64,9,9,2);ctx.fill();
+      // Armour edge highlights on greaves and boots add depth at full-body scale.
+      ctx.strokeStyle='rgba(255,255,255,.48)';ctx.lineWidth=2;
+      ctx.beginPath();ctx.moveTo(18,-48);ctx.lineTo(29,-16);ctx.moveTo(-17,-49);ctx.lineTo(-25,-16);ctx.stroke();
+      ctx.fillStyle=hero.armorPlate;ctx.globalAlpha=.8;
+      ctx.beginPath();ctx.roundRect(20,-20,12,4,2);ctx.fill();
+      ctx.beginPath();ctx.roundRect(-27,-20,12,4,2);ctx.fill();ctx.globalAlpha=1;
+      // Gauntlet rings and visor reflection.
+      ctx.strokeStyle=hero.visorColor;ctx.lineWidth=2;ctx.beginPath();ctx.arc(38+armReach,-68+armLift,8,-.9,.9);ctx.stroke();
+      ctx.fillStyle='rgba(255,255,255,.75)';ctx.beginPath();ctx.ellipse(8,headY-7,4,1.4,-.35,0,Math.PI*2);ctx.fill();
+      ctx.restore();
+
+      // Hurt flash overlay
+      if (hurtTimer > 0) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.42)';
+        ctx.beginPath();
+        ctx.arc(4, -72, 54, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.restore();
+    }
+
+    // =========================================================================
+    // 7. SKY-TERRACE MOUNTAIN ARENA BACKDROP
+    // =========================================================================
+    function renderSkyTerraceArena(ctx, w, h) {
+      // Blue-hour mountain arena: cinematic, readable, and deliberately not white.
+      const horizon = h * 0.55;
+      const floorY = h * 0.69;
+      const sky = ctx.createLinearGradient(0, 0, 0, h);
+      sky.addColorStop(0, '#397db7');
+      sky.addColorStop(.34, '#78b7e5');
+      sky.addColorStop(.58, '#b4d4e9');
+      sky.addColorStop(.72, '#d2e2ee');
+      sky.addColorStop(1, '#a9c4d9');
+      ctx.fillStyle = sky; ctx.fillRect(0,0,w,h);
+
+      // Cool moonlit opening in the clouds.
+      const glow = ctx.createRadialGradient(w*.5,h*.18,4,w*.5,h*.18,w*.43);
+      glow.addColorStop(0,'rgba(231,246,255,.78)');
+      glow.addColorStop(.32,'rgba(184,220,245,.34)');
+      glow.addColorStop(1,'rgba(95,155,204,0)');
+      ctx.fillStyle=glow; ctx.fillRect(0,0,w,h*.7);
+
+      // Soft cloud banks.
+      for(let i=0;i<9;i++){
+        const x=((i*173+w*.03)%(w*1.12))-w*.06;
+        const y=h*(.12+(i%4)*.075);
+        ctx.fillStyle='rgba(225,242,255,.15)';
+        ctx.beginPath();ctx.ellipse(x,y,w*(.07+(i%3)*.025),h*.018,0,0,Math.PI*2);ctx.fill();
+      }
+
+      // Layered distant mountain range.
+      function ridge(points, color) {
+        ctx.beginPath(); ctx.moveTo(0,horizon);
+        points.forEach(([x,y])=>ctx.lineTo(w*x,h*y));
+        ctx.lineTo(w,horizon);ctx.closePath();
+        ctx.fillStyle=color;ctx.fill();
+      }
+      ridge([[0,.47],[.10,.35],[.18,.43],[.29,.29],[.39,.44],[.50,.27],[.61,.43],[.72,.31],[.83,.42],[.93,.30],[1,.43]],'#7198b8');
+      ridge([[0,.53],[.12,.43],[.23,.49],[.34,.38],[.47,.51],[.59,.39],[.72,.50],[.84,.40],[.94,.48],[1,.42]],'#547d9f');
+      ridge([[0,.58],[.16,.51],[.29,.56],[.43,.47],[.56,.57],[.70,.49],[.84,.57],[1,.50]],'#416b90');
+
+      // Snow caps and fine mountain highlights.
+      ctx.fillStyle='rgba(232,245,255,.76)';
+      [[.10,.35,.035],[.29,.29,.045],[.50,.27,.05],[.72,.31,.04],[.93,.30,.04]].forEach(([x,y,r])=>{
+        ctx.beginPath();ctx.moveTo(w*x,h*y);ctx.lineTo(w*(x-r),h*(y+.045));ctx.lineTo(w*(x+r),h*(y+.045));ctx.closePath();ctx.fill();
+      });
+
+      // Distant fortress towers framing the battlefield.
+      for(const side of [0,1]){
+        const x=side===0?w*.035:w*.885, tw=w*.08, top=h*.12, bottom=floorY;
+        ctx.fillStyle='rgba(210,231,247,.78)';
+        ctx.fillRect(x,top,tw*.22,bottom-top);
+        ctx.fillRect(x+tw*.78,top,tw*.22,bottom-top);
+        ctx.fillRect(x-tw*.06,top,tw*1.12,h*.035);
+        ctx.fillStyle='rgba(65,112,153,.55)';
+        ctx.fillRect(x+tw*.34,top+h*.08,tw*.32,h*.23);
+        ctx.strokeStyle='rgba(231,245,255,.55)';ctx.lineWidth=2;
+        ctx.strokeRect(x,top,tw,bottom-top);
+      }
+
+      // Stone arena floor in cool slate-blue tones.
+      const floor=ctx.createLinearGradient(0,floorY,0,h);
+      floor.addColorStop(0,'#c4d9e9');floor.addColorStop(.42,'#a9c4da');floor.addColorStop(1,'#789bb9');
+      ctx.fillStyle=floor;ctx.fillRect(0,floorY,w,h-floorY);
+      ctx.strokeStyle='rgba(37,83,124,.25)';ctx.lineWidth=1;
+      for(let i=0;i<6;i++){
+        const yy=floorY+(h-floorY)*i/6;
+        ctx.beginPath();ctx.moveTo(w*.05,yy);ctx.lineTo(w*.95,yy);ctx.stroke();
+      }
+      ctx.strokeStyle='rgba(225,241,255,.25)';
+      for(let i=0;i<11;i++){
+        const x=w*(.04+i*.092);
+        ctx.beginPath();ctx.moveTo(w*.5,floorY);ctx.lineTo(x,h);ctx.stroke();
+      }
+
+      // Large circular combat seal, with cool luminous rings.
+      const cx=w*.5,cy=floorY+(h-floorY)*.56;
+      ctx.save();ctx.shadowColor='rgba(28,117,190,.28)';ctx.shadowBlur=24;
+      ctx.fillStyle='rgba(38,103,153,.10)';
+      ctx.beginPath();ctx.ellipse(cx,cy,w*.35,(h-floorY)*.40,0,0,Math.PI*2);ctx.fill();ctx.restore();
+      [[.35,.40,'rgba(225,243,255,.52)',3],[.28,.32,'rgba(49,129,190,.42)',2],[.18,.21,'rgba(49,129,190,.32)',2]].forEach(([rx,ry,col,lw])=>{
+        ctx.strokeStyle=col;ctx.lineWidth=lw;ctx.beginPath();ctx.ellipse(cx,cy,w*rx,(h-floorY)*ry,0,0,Math.PI*2);ctx.stroke();
+      });
+      ctx.strokeStyle='rgba(31,91,139,.22)';ctx.lineWidth=2;
+      ctx.beginPath();ctx.moveTo(cx,floorY);ctx.lineTo(cx,h);ctx.stroke();
+
+      // Vignette adds depth without making the scene dark.
+      const vignette=ctx.createRadialGradient(w*.5,h*.45,w*.18,w*.5,h*.45,w*.78);
+      vignette.addColorStop(.55,'rgba(20,55,90,0)');
+      vignette.addColorStop(1,'rgba(18,54,88,.23)');
+      ctx.fillStyle=vignette;ctx.fillRect(0,0,w,h);
+    }
+
+    // =========================================================================
+    // 8. POWER BEAM & IMPACT VFX RENDERER
+    // =========================================================================
+    function drawPowerBeam(ctx, startX, endX, y, power, time) {
+      if (!power || Math.abs(endX - startX) < 4) return;
+      const dir = endX >= startX ? 1 : -1;
+      const len = Math.abs(endX - startX);
+      const pulse = 1 + Math.sin(time * 14) * 0.055;
+      const style = power.style;
+      const c = power.color;
+      const p = power.primary;
+      const core = power.core;
+
+      // Draw in the direction of travel. Avoid additive white blending: each
+      // element keeps its own saturated colour and silhouette.
+      ctx.save();
+      ctx.translate(startX, y);
+      ctx.scale(dir, 1);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      // Coloured outer wake with a dark edge so it remains visible on bright skies.
+      ctx.globalAlpha = .36;
+      ctx.strokeStyle = p;
+      ctx.lineWidth = 38 * pulse;
+      ctx.shadowColor = c;
+      ctx.shadowBlur = 15;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(len, 0);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Saturated central body — deliberately not white.
+      ctx.globalAlpha = .98;
+      ctx.strokeStyle = c;
+      ctx.lineWidth = 23 * pulse;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(len, 0);
+      ctx.stroke();
+
+      // Contrasting coloured travelling bands create a visible sense of speed.
+      ctx.globalAlpha = .95;
+      for (let i = 0; i < 10; i++) {
+        const x = ((time * 300 + i * 59) % Math.max(1, len));
+        ctx.strokeStyle = i % 2 ? core : p;
+        ctx.lineWidth = i % 3 === 0 ? 7 : 4;
+        ctx.beginPath();
+        ctx.moveTo(x - 18, -8);
+        ctx.lineTo(x - 7, 0);
+        ctx.lineTo(x + 9, 8);
+        ctx.stroke();
+      }
+
+      // Distinct travelling shape language for every element.
+      if (style === 'fire' || style === 'phoenix') {
+        for (let i = 0; i < Math.max(3, Math.floor(len / 38)); i++) {
+          const x = (i * 41 + time * 205) % Math.max(1, len);
+          const h = 15 + (i % 3) * 6;
+          ctx.fillStyle = i % 2 ? '#ffcf45' : '#ff542e';
+          ctx.beginPath();
+          ctx.moveTo(x - 13, 0);
+          ctx.quadraticCurveTo(x - 4, -h * 1.8, x + 9, -h);
+          ctx.quadraticCurveTo(x + 20, 0, x + 4, h);
+          ctx.quadraticCurveTo(x - 8, h * 1.4, x - 13, 0);
+          ctx.fill();
+        }
+        if (style === 'phoenix') {
+          ctx.strokeStyle = '#ffe18a'; ctx.lineWidth = 3;
+          for (let i = 0; i < 4; i++) {
+            const x = (time * 170 + i * len / 4) % len;
+            ctx.beginPath(); ctx.moveTo(x, -17); ctx.quadraticCurveTo(x + 13, -32, x + 28, -12); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(x, 17); ctx.quadraticCurveTo(x + 13, 32, x + 28, 12); ctx.stroke();
+          }
+        }
+      } else if (style === 'water') {
+        // Two deep-blue wave rails and a bright cyan crest; droplets travel ahead.
+        for (let rail = 0; rail < 3; rail++) {
+          ctx.strokeStyle = rail === 1 ? '#8cecff' : '#0879d5';
+          ctx.lineWidth = rail === 1 ? 6 : 4;
+          ctx.beginPath();
+          for (let x = 0; x <= len; x += 7) {
+            const yy = Math.sin(x * .045 - time * 13 + rail * 1.7) * (8 + rail * 3);
+            if (x === 0) ctx.moveTo(x, yy); else ctx.lineTo(x, yy);
+          }
+          ctx.stroke();
+        }
+        for (let i = 0; i < 12; i++) {
+          const x = (time * 240 + i * 37) % Math.max(1, len);
+          const yy = Math.sin(x * .045 - time * 13) * 13;
+          ctx.fillStyle = i % 2 ? '#b9f5ff' : '#168de8';
+          ctx.beginPath(); ctx.ellipse(x, yy - 12, 4, 8, -.35, 0, Math.PI * 2); ctx.fill();
+        }
+      } else if (style === 'thunder') {
+        // Repeated angular yellow lightning forks, outlined in amber.
+        for (let i = 0; i < Math.max(2, Math.floor(len / 75)); i++) {
+          const x = (i * 79 + time * 260) % Math.max(1, len);
+          ctx.strokeStyle = '#9b6500'; ctx.lineWidth = 8;
+          ctx.beginPath(); ctx.moveTo(x - 18, 0); ctx.lineTo(x - 5, -19); ctx.lineTo(x + 1, 3); ctx.lineTo(x + 17, -13); ctx.stroke();
+          ctx.strokeStyle = '#ffe34f'; ctx.lineWidth = 4;
+          ctx.beginPath(); ctx.moveTo(x - 18, 0); ctx.lineTo(x - 5, -19); ctx.lineTo(x + 1, 3); ctx.lineTo(x + 17, -13); ctx.stroke();
+        }
+      } else if (style === 'frost') {
+        for (let i = 0; i < Math.max(2, Math.floor(len / 48)); i++) {
+          const x = (i * 51 + time * 115) % Math.max(1, len);
+          ctx.fillStyle = '#bafaff';
+          ctx.strokeStyle = '#087fbd'; ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(x, -19); ctx.lineTo(x + 9, -5); ctx.lineTo(x + 4, 0);
+          ctx.lineTo(x + 10, 7); ctx.lineTo(x, 20); ctx.lineTo(x - 9, 7);
+          ctx.lineTo(x - 4, 0); ctx.lineTo(x - 9, -5); ctx.closePath();
+          ctx.fill(); ctx.stroke();
+        }
+      } else if (style === 'wind') {
+        // Clearly visible emerald corkscrew ribbons, not a white beam.
+        for (let strand = 0; strand < 3; strand++) {
+          ctx.strokeStyle = strand === 1 ? '#c9ff70' : '#008b62';
+          ctx.lineWidth = strand === 1 ? 5 : 4;
+          ctx.beginPath();
+          for (let x = 0; x <= len; x += 5) {
+            const yy = Math.sin(x * .055 - time * 12 + strand * 2.1) * (13 + strand * 3);
+            if (x === 0) ctx.moveTo(x, yy); else ctx.lineTo(x, yy);
+          }
+          ctx.stroke();
+        }
+        for (let i = 0; i < 9; i++) {
+          const x = (time * 220 + i * 43) % Math.max(1, len);
+          ctx.save(); ctx.translate(x, Math.sin(x * .055 - time * 12) * 14);
+          ctx.rotate(Math.sin(time * 5 + i) * .8);
+          ctx.fillStyle = i % 2 ? '#a7f45b' : '#00a879';
+          ctx.beginPath(); ctx.moveTo(-10, 0); ctx.quadraticCurveTo(0, -13, 14, -2);
+          ctx.quadraticCurveTo(3, 12, -10, 0); ctx.fill(); ctx.restore();
+        }
+      } else if (style === 'plasma') {
+        for (let i = 0; i < 8; i++) {
+          const x = (time * 240 + i * 42) % Math.max(1, len);
+          ctx.strokeStyle = i % 2 ? '#ff9cff' : '#8d27d9';
+          ctx.lineWidth = 4;
+          ctx.beginPath(); ctx.arc(x, Math.sin(time * 8 + i) * 8, 10 + (i % 3) * 3, time * 3 + i, time * 3 + i + 4.5); ctx.stroke();
+        }
+      } else if (style === 'shadow') {
+        for (let i = 0; i < 9; i++) {
+          const x = (time * 170 + i * 45) % Math.max(1, len);
+          ctx.fillStyle = i % 2 ? '#34206f' : '#8b5cf6';
+          ctx.beginPath(); ctx.ellipse(x, Math.sin(time * 6 + i) * 10, 15, 9, time + i, 0, Math.PI * 2); ctx.fill();
+        }
+        ctx.strokeStyle = '#c4b5fd'; ctx.lineWidth = 3;
+        ctx.setLineDash([9, 8]); ctx.lineDashOffset = -time * 60;
+        ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(len, 0); ctx.stroke(); ctx.setLineDash([]);
+      } else if (style === 'shield') {
+        for (let i = 0; i < Math.max(2, Math.floor(len / 54)); i++) {
+          const x = (i * 57 + time * 125) % Math.max(1, len);
+          ctx.fillStyle = '#72b9ff'; ctx.strokeStyle = '#0756b7'; ctx.lineWidth = 3;
+          ctx.beginPath();
+          for (let j = 0; j < 6; j++) {
+            const a = Math.PI / 3 * j;
+            const px = x + Math.cos(a) * 13, py = Math.sin(a) * 13;
+            if (!j) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+          }
+          ctx.closePath(); ctx.fill(); ctx.stroke();
+        }
+      } else if (style === 'solar') {
+        for (let i = 0; i < 9; i++) {
+          const x = (time * 190 + i * 43) % Math.max(1, len);
+          ctx.strokeStyle = i % 2 ? '#fff0a3' : '#d97706';
+          ctx.lineWidth = 4;
+          ctx.beginPath(); ctx.moveTo(x, -20); ctx.lineTo(x + 7, 0); ctx.lineTo(x, 20); ctx.stroke();
+        }
+      }
+
+      // Large, saturated projectile head. The dark rim keeps its shape readable.
+      const headX = len;
+      ctx.save();
+      ctx.translate(headX, 0);
+      ctx.scale(pulse, pulse);
+      ctx.globalAlpha = 1;
+      ctx.shadowColor = c; ctx.shadowBlur = 17;
+      ctx.fillStyle = p;
+      ctx.beginPath(); ctx.arc(0, 0, 31, 0, Math.PI * 2); ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = '#153b61'; ctx.lineWidth = 5;
+      ctx.beginPath(); ctx.arc(0, 0, 29, 0, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = c;
+      ctx.beginPath(); ctx.arc(0, 0, 23, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = core; ctx.lineWidth = 5;
+      ctx.beginPath(); ctx.arc(0, 0, 15, time * 2, time * 2 + Math.PI * 1.55); ctx.stroke();
+      ctx.fillStyle = core;
+      ctx.beginPath(); ctx.arc(-3, -3, 7, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+      ctx.restore();
+    }
+
+    function spawnImpactBurst(x, y, power) {
+      const c=power?power.color:'#38bdf8';
+      [1, .72, .46].forEach((factor,index)=>shockRings.push({
+        x,y,radius:8+index*12,maxRadius:150*factor,color:index===1?'#ffffff':c,alpha:.98-index*.12
+      }));
+      for(let i=0;i<58;i++){
+        const angle=(Math.PI*2*i/58)+(Math.random()-.5)*.16;
+        const speed=2.5+Math.random()*9;
+        vfxParticles.push({
+          x,y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,
+          gravity:.045,life:.9+Math.random()*.35,decay:.012+Math.random()*.009,
+          radius:2+Math.random()*4,color:i%5===0?'#ffffff':c
+        });
+      }
+      // Bright central flash ring, fades as the shockwave expands.
+      shockRings.push({x,y,radius:3,maxRadius:82,color:'#ffffff',alpha:1});
+    }
+
+    function updateAndDrawVFX(ctx) {
+      for (let i = shockRings.length - 1; i >= 0; i--) {
+        const r = shockRings[i];
+        r.radius += (r.maxRadius - r.radius) * 0.14;
+        r.alpha -= 0.03;
+        if (r.alpha <= 0) {
+          shockRings.splice(i, 1);
+          continue;
+        }
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, r.alpha);
+        ctx.strokeStyle = r.color;
+        ctx.lineWidth = 3.5;
+        ctx.beginPath();
+        ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      for (let i = vfxParticles.length - 1; i >= 0; i--) {
+        const pt = vfxParticles[i];
+        pt.x += pt.vx;
+        pt.y += pt.vy;
+        pt.vy += pt.gravity;
+        pt.life -= pt.decay;
+        if (pt.life <= 0) {
+          vfxParticles.splice(i, 1);
+          continue;
+        }
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, pt.life);
+        ctx.fillStyle = pt.color;
+        ctx.shadowColor = pt.color; ctx.shadowBlur = 12;
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, pt.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.restore();
+      }
+    }
+
+    // =========================================================================
+    // 9. COMBAT PHASE SIMULATION & VICTORY CELEBRATION
+    // =========================================================================
+    function updateCombat(dt, w, h) {
+      if (game.p1.hurtTimer > 0) game.p1.hurtTimer = Math.max(0, game.p1.hurtTimer - dt);
+      if (game.p2.hurtTimer > 0) game.p2.hurtTimer = Math.max(0, game.p2.hurtTimer - dt);
+      game.p1.recoilX *= 0.86;
+      game.p2.recoilX *= 0.86;
+
+      if (game.phase === 'CHARGING') {
+        game.clash.timer += dt;
+        if (game.clash.timer >= 1.85) {
+          game.phase = 'TRAVEL_TO_CENTER';
+          game.clash.timer = 0;
+          sfx.playLaunch();
+          setStatusPill(`${game.p1.pickedPower.name}  VS  ${game.p2.pickedPower.name}`, true);
+        }
+      } else if (game.phase === 'TRAVEL_TO_CENTER') {
+        game.clash.timer += dt;
+        const t = Math.min(1, game.clash.timer / 1.28);
+        const eased = 1 - Math.pow(1 - t, 2.2);
+        game.clash.p1Reach = eased;
+        game.clash.p2Reach = eased;
+
+        if (t >= 1) {
+          game.phase = 'CENTER_CLASH';
+          game.clash.timer = 0;
+          game.shake = 12;
+          sfx.playClash();
+          spawnImpactBurst(w * game.clash.clashXRatio, h * 0.57, game.p1.pickedPower);
+        }
+      } else if (game.phase === 'CENTER_CLASH') {
+        game.clash.timer += dt;
+        game.shake = Math.max(game.shake, 4);
+
+        if (game.clash.timer >= 1.45) {
+          game.clash.timer = 0;
+          if (game.clash.winnerSide === 1 || game.clash.winnerSide === 2) {
+            game.phase = 'SURGE_HIT';
+            game.clash.surgeProgress = 0;
+            sfx.playLaunch();
+          } else {
+            // Same power: draw -> no winner, no damage
+            game.phase = 'DRAW_PULSE';
+            sfx.playDraw();
+            setStatusPill('DRAW — NO WINNER', true);
+          }
+        }
+      } else if (game.phase === 'SURGE_HIT') {
+        game.clash.surgeProgress = Math.min(1, game.clash.surgeProgress + dt / 0.92);
+        const s = game.clash.surgeProgress;
+        // Both forces remain engaged at the centre; neither side surges through first.
+        game.clash.p1Reach = 1 + s * 0.10;
+        game.clash.p2Reach = 1 + s * 0.10;
+
+        if (s >= 1 && !game.clash.appliedDamage) {
+          game.clash.appliedDamage = true;
+          game.shake = 22;
+          const a=game.p1.pickedPower, b=game.p2.pickedPower;
+          spawnImpactBurst(w*.5,h*.57,a); spawnImpactBurst(w*.5,h*.57,b);
+          const shieldActive = a.id==='shield' || b.id==='shield';
+          const megaClash = a.id==='megapower' && b.id==='megapower';
+          let damageToP1=0, damageToP2=0;
+          if(!shieldActive && !megaClash){
+            damageToP1 = b.id==='megapower' ? 45 : 20;
+            damageToP2 = a.id==='megapower' ? 45 : 20;
+          }
+          game.p1.power=Math.max(0,game.p1.power-damageToP1);
+          game.p2.power=Math.max(0,game.p2.power-damageToP2);
+          if(damageToP1>0){game.p1.hurtTimer=.95;game.p1.recoilX=-24;game.p1.anim='hurt';}
+          if(damageToP2>0){game.p2.hurtTimer=.95;game.p2.recoilX=24;game.p2.anim='hurt';}
+          if(shieldActive) setStatusPill('SHIELD ACTIVATED — NO DAMAGE',true);
+          else if(megaClash) setStatusPill('MEGAPOWER VS MEGAPOWER — ZERO DAMAGE',true);
+          else setStatusPill(`CENTRE CLASH — ${damageToP1}% / ${damageToP2}% DAMAGE`,true);
+          updatePowerLinesHUD();
+          game.clash.timer = 0;
+        }
+
+        if (game.clash.appliedDamage) {
+          game.clash.timer += dt;
+          if (game.clash.timer >= 0.85) {
+            if (game.p1.power <= 0) {
+              finishMatch(2);
+            } else if (game.p2.power <= 0) {
+              finishMatch(1);
+            } else {
+              game.round += 1;
+              startNewRound(false);
+            }
+          }
+        }
+      } else if (game.phase === 'DRAW_PULSE') {
+        game.clash.timer += dt;
+        if (game.clash.timer >= 1.15) {
+          game.round += 1;
+          startNewRound(false);
+        }
+      }
+    }
+
+    function finishMatch(winnerNum) {
+      game.phase = 'VICTORY';
+      game.winner = winnerNum;
+      const winP = winnerNum === 1 ? game.p1 : game.p2;
+      const loseP = winnerNum === 1 ? game.p2 : game.p1;
+
+      winP.anim = 'win';
+      loseP.anim = 'lose';
+      sfx.playWinFanfare();
+      setStatusPill(`${winP.name} WINS!`, true);
+
+      const cx = battleCanvas.width * 0.5;
+      const cy = battleCanvas.height * 0.45;
+      for (let burst = 0; burst < 4; burst++) {
+        const bx = battleCanvas.width * (0.2 + burst * 0.2);
+        const by = battleCanvas.height * (0.24 + (burst % 2) * 0.14);
+        shockRings.push({ x: bx, y: by, radius: 8, maxRadius: 72, color: '#fbbf24', alpha: 1 });
+        for (let i = 0; i < 20; i++) {
+          const ang = (Math.PI * 2 * i) / 20;
+          const spd = 2.2 + Math.random() * 5;
+          vfxParticles.push({
+            x: bx,
+            y: by,
+            vx: Math.cos(ang) * spd,
+            vy: Math.sin(ang) * spd - 1,
+            radius: 2.8 + Math.random() * 3.2,
+            color: i % 2 === 0 ? '#fde047' : (winnerNum === 1 ? '#38bdf8' : '#fb923c'),
+            life: 1.15,
+            decay: 0.02,
+            gravity: 0.08
+          });
+        }
+      }
+      spawnImpactBurst(cx, cy + 40, winP.pickedPower || { color: '#fbbf24', core: '#ffffff' });
+
+      victoryWinnerName.textContent = `${winP.name} WINS!`;
+      victorySubtext.textContent = `${winP.hero.label} defeated ${loseP.name} in Round ${game.round}!`;
+      victoryBanner.classList.remove('hidden');
+    }
+
+    // =========================================================================
+    // 10. CANVAS RENDERING FOR POSTER, PREVIEWS & BATTLE ARENA
+    // =========================================================================
+    function renderPosterCanvas() {
+      const ctx = posterCanvas.getContext('2d');
+      const w = posterCanvas.width;
+      const h = posterCanvas.height;
+      if (!w || !h) return;
+
+      ctx.save(); ctx.filter = 'blur(5px) saturate(1.18)'; renderSkyTerraceArena(ctx, w, h); ctx.restore();
+      const groundY = h * 0.84;
+      const scale = Math.max(0.85, Math.min(1.65, h / 270));
+
+      drawRealisticHero(ctx, w * 0.28, groundY, scale, 1, HERO_SUITS[0], 'idle', game.time, 0, 0);
+      drawRealisticHero(ctx, w * 0.72, groundY, scale, -1, HERO_SUITS[3], 'idle', game.time, 0, 0);
+      updateAndDrawVFX(ctx);
+    }
+
+    function renderChampionPreviews() {
+      [
+        { canvas: p1PreviewCanvas, hero: game.p1.hero, facing: 1 },
+        { canvas: p2PreviewCanvas, hero: game.p2.hero, facing: -1 }
+      ].forEach(({ canvas, hero, facing }) => {
+        const ctx = canvas.getContext('2d');
+        const w = canvas.width;
+        const h = canvas.height;
+        if (!w || !h) return;
+        ctx.clearRect(0, 0, w, h);
+
+        const groundY = h * 0.9;
+        const scale = Math.max(0.75, Math.min(1.45, h / 165));
+        drawRealisticHero(ctx, w * 0.5, groundY, scale, facing, hero, 'idle', game.time, 0, 0);
+      });
+    }
+
+    function renderBattleArena() {
+      const ctx = battleCanvas.getContext('2d');
+      const w = battleCanvas.width;
+      const h = battleCanvas.height;
+      if (!w || !h) return;
+
+      ctx.save();
+      if (game.shake > 0.2) {
+        const sx = (Math.random() - 0.5) * game.shake;
+        const sy = (Math.random() - 0.5) * game.shake;
+        ctx.translate(sx, sy);
+        game.shake *= 0.84;
+      } else {
+        game.shake = 0;
+      }
+
+      ctx.save(); ctx.filter = 'blur(5px) saturate(1.18)'; renderSkyTerraceArena(ctx, w, h); ctx.restore();
+
+      const groundY = h * 0.88;
+      const p1X = w * 0.175;
+      const p2X = w * 0.825;
+      const scale = Math.max(1.15, Math.min(2.15, h / 235));
+
+      drawRealisticHero(
+        ctx, p1X, groundY, scale, 1,
+        game.p1.hero, game.p1.anim, game.time, game.p1.hurtTimer, game.p1.recoilX
+      );
+      drawRealisticHero(
+        ctx, p2X, groundY, scale, -1,
+        game.p2.hero, game.p2.anim, game.time, game.p2.hurtTimer, game.p2.recoilX
+      );
+
+      // Central collision vortex: opposing elemental force compresses, pulses and fractures.
+      if (game.phase === 'CENTER_CLASH') {
+        const cx=w*game.clash.clashXRatio, cy=h*.57;
+        const t=game.clash.timer;
+        const pulse=1+Math.sin(t*23)*.13;
+        const radius=39*pulse+Math.sin(t*11)*5;
+        ctx.save();
+        ctx.globalCompositeOperation='lighter';
+        const core=ctx.createRadialGradient(cx,cy,2,cx,cy,radius*2.7);
+        core.addColorStop(0,'rgba(255,255,255,1)');
+        core.addColorStop(.16,'rgba(220,246,255,.98)');
+        core.addColorStop(.39,game.p1.pickedPower.color+'cc');
+        core.addColorStop(.62,game.p2.pickedPower.color+'99');
+        core.addColorStop(1,'rgba(255,255,255,0)');
+        ctx.fillStyle=core;ctx.beginPath();ctx.arc(cx,cy,radius*2.7,0,Math.PI*2);ctx.fill();
+        for(let ring=0;ring<4;ring++){
+          ctx.strokeStyle=ring%2?game.p1.pickedPower.core:game.p2.pickedPower.core;
+          ctx.globalAlpha=.75-ring*.12;ctx.lineWidth=ring===0?5:2.5;
+          ctx.beginPath();ctx.arc(cx,cy,radius*(.72+ring*.30),t*(ring%2?3:-2),t*(ring%2?3:-2)+Math.PI*(1.35+ring*.12));ctx.stroke();
+        }
+        // Crackling spokes radiating from the compressed power sphere.
+        for(let ray=0;ray<14;ray++){
+          const ang=(Math.PI*2*ray/14)+t*2.1;
+          const inner=radius*.75, outer=radius*(1.45+(ray%3)*.24);
+          ctx.strokeStyle=ray%2?game.p1.pickedPower.core:game.p2.pickedPower.core;
+          ctx.lineWidth=ray%3===0?4:2;ctx.globalAlpha=.8;
+          ctx.beginPath();ctx.moveTo(cx+Math.cos(ang)*inner,cy+Math.sin(ang)*inner);
+          ctx.lineTo(cx+Math.cos(ang+.08)*outer*.72,cy+Math.sin(ang+.08)*outer*.72);
+          ctx.lineTo(cx+Math.cos(ang-.04)*outer,cy+Math.sin(ang-.04)*outer);ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      // Attacks launch from each hero's gauntlet; charging has visible gathering energy.
+      if (game.phase === 'CHARGING' || game.phase === 'TRAVEL_TO_CENTER' ||
+          game.phase === 'CENTER_CLASH' || game.phase === 'SURGE_HIT' || game.phase === 'DRAW_PULSE') {
+        const beamY = h * 0.57;
+        const start1 = p1X + 47 * scale;
+        const start2 = p2X - 47 * scale;
+        const midX = w * game.clash.clashXRatio;
+        if (game.phase === 'CHARGING') {
+          [ [start1,game.p1.pickedPower], [start2,game.p2.pickedPower] ].forEach(([x,pw],side)=>{
+            if(!pw)return;
+            const pulse=22+Math.sin(game.time*17)*6;
+            const halo=ctx.createRadialGradient(x,beamY,2,x,beamY,pulse*2.4);
+            halo.addColorStop(0,pw.core); halo.addColorStop(.35,pw.color+'99'); halo.addColorStop(1,pw.color+'00');
+            ctx.save();ctx.globalCompositeOperation='lighter';ctx.fillStyle=halo;
+            ctx.beginPath();ctx.arc(x,beamY,pulse*2.4,0,Math.PI*2);ctx.fill();
+            ctx.strokeStyle=pw.color;ctx.lineWidth=4;ctx.beginPath();
+            ctx.arc(x,beamY,pulse,game.time*3,game.time*3+Math.PI*1.65);ctx.stroke();ctx.restore();
+          });
+        } else {
+          const end1 = start1 + (midX - start1) * game.clash.p1Reach;
+          const end2 = start2 - (start2 - midX) * game.clash.p2Reach;
+          drawPowerBeam(ctx,start1,end1,beamY,game.p1.pickedPower,game.time);
+          drawPowerBeam(ctx,start2,end2,beamY,game.p2.pickedPower,game.time);
+        }
+      }
+
+      updateAndDrawVFX(ctx);
+      ctx.restore();
+    }
+
+    // =========================================================================
+    // 11. RESPONSIVE CANVAS SIZING & MAIN LOOP
+    // =========================================================================
+    function resizeCanvasToParent(canvas) {
+      const parent = canvas.parentElement;
+      if (!parent) return;
+      const rect = parent.getBoundingClientRect();
+      const targetW = Math.max(1, Math.floor(rect.width));
+      const targetH = Math.max(1, Math.floor(rect.height));
+      if (canvas.width !== targetW || canvas.height !== targetH) {
+        canvas.width = targetW;
+        canvas.height = targetH;
+      }
+    }
+
+    function resizeAllCanvases() {
+      resizeCanvasToParent(posterCanvas);
+      resizeCanvasToParent(p1PreviewCanvas);
+      resizeCanvasToParent(p2PreviewCanvas);
+      resizeCanvasToParent(battleCanvas);
+    }
+
+    let lastFrameTime = performance.now();
+    function mainLoop(now) {
+      const dt = Math.min(0.05, (now - lastFrameTime) / 1000);
+      lastFrameTime = now;
+      game.time += dt;
+
+      if (game.screen === 'POSTER') {
+        renderPosterCanvas();
+      } else if (game.screen === 'SELECT') {
+        renderChampionPreviews();
+      } else if (game.screen === 'ARENA') {
+        updateCombat(dt, battleCanvas.width, battleCanvas.height);
+        renderBattleArena();
+      }
+
+      requestAnimationFrame(mainLoop);
+    }
+
+    // =========================================================================
+    // 12. EVENT LISTENERS
+    // =========================================================================
+    toSelectScreenBtn.addEventListener('click', () => {
+      sfx.playSelect(540);
+      showScreen('SELECT');
+    });
+
+    backToPosterBtn.addEventListener('click', () => {
+      sfx.playSelect(420);
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'GPA_EXIT_ARENA' }, window.location.origin);
+      } else {
+        window.location.href = '/';
+      }
+    });
+
+    p1NameInput.addEventListener('input', syncNamesFromInputs);
+    p2NameInput.addEventListener('input', syncNamesFromInputs);
+
+    enterArenaBtn.addEventListener('click', () => {
+      sfx.playLaunch();
+      syncNamesFromInputs();
+      showScreen('ARENA');
+      startNewRound(true);
+    });
+
+    exitArenaBtn.addEventListener('click', () => {
+      sfx.playSelect(440);
+      showScreen('SELECT');
+    });
+
+    attackBtn.addEventListener('click', triggerAttack);
+
+    editNamesAfterWinBtn.addEventListener('click', () => {
+      sfx.playSelect(520);
+      victoryBanner.classList.add('hidden');
+      showScreen('SELECT');
+      p1NameInput.focus();
+    });
+
+    rematchBtn.addEventListener('click', () => {
+      sfx.playLaunch();
+      syncNamesFromInputs();
+      startNewRound(true);
+    });
+
+    window.addEventListener('resize', resizeAllCanvases);
+
+    // Initialize UI
+    buildSuitPills();
+    syncNamesFromInputs();
+    resizeAllCanvases();
+    requestAnimationFrame(mainLoop);
+  </script>
+</body>
+</html>

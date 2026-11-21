@@ -1,0 +1,27 @@
+POWER VISUALS UPDATE
+
+This update adds 16 separate transparent power-effect images and maps every Global Super Hero power to its matching artwork.
+
+Power mappings:
+- THUNDER SPEAR -> lightning
+- INFERNO WAVE -> fire
+- FROST BREAKER -> ice
+- VOID CRUSH -> shadow
+- SOLAR BURST -> solar beam
+- WIND CUTTER -> wind blade
+- CRYSTAL GUARD -> crystal shield
+- METEOR KICK -> meteor impact
+- PLASMA ORB -> plasma orb
+- PHANTOM DASH -> speed trail
+- TIDAL DRAGON -> water dragon
+- OCEAN SPIRAL -> water vortex
+- PHOENIX ROAR -> phoenix flame
+- FROST NOVA -> frost nova
+- GUARDIAN AEGIS -> guardian shield
+- MEND AURA -> healing aura
+
+The arena renders the chosen artwork as a transparent projectile/effect, mirrors it for Player 2, and animates it toward the center. The fighter sprites remain independently sized.
+
+To deploy: replace the existing GitHub project contents with this ZIP and let Netlify redeploy. No Supabase migration is required.
+
+Validation note: npm run build was attempted but cannot complete in this environment because project dependencies (React, Vite, etc.) are not installed. Install dependencies with npm install before building locally.

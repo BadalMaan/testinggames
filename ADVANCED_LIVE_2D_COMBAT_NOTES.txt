@@ -1,0 +1,36 @@
+PUNJABI GAME ARENA — ADVANCED LIVE 2D COMBAT PRESENTATION
+
+This release improves the earlier Canvas projectile pass in response to the supplied Netlify screenshot.
+
+VISIBLE CHANGES
+1. Fighter action sprite bug fixed: during clash, the component now actually selects the existing blue/red punch or kick sprites. Previously it passed `false` to the action-sprite selector, so the idle image remained visible throughout the attack.
+2. Fighter choreography is split across charge, wind-up, release, collision, breakthrough, impact and recovery beats. The original two-player turn-based selection and ATTACK button are unchanged.
+3. Power origins moved closer to the fighters' forward hands and the collision line moved to chest height.
+4. Generic thin beam replaced with procedural power silhouettes rendered live on Canvas:
+   - Fire: layered flame tongues, hot core and ember wake.
+   - Lightning: branching electrical bolts.
+   - Ice: crystal shards and frost wake.
+   - Water: moving water ribbons; Tidal Dragon has a distinct dragon-head silhouette; Ocean Spiral has rotating water rings.
+   - Phoenix Roar: winged flame silhouette.
+   - Shadow: rotating void vortex.
+   - Solar: radiant core and rays.
+   - Wind: multiple curved pressure streams.
+   - Speed/impact: compressed kinetic streaks.
+   - Shield/heal: their own shield/cross glyphs and defensive charge rings.
+5. Hit timing, health calculations, round selection, names, health HUD, power cards and existing background remain intact.
+
+TECHNICAL
+- React + HTML Canvas 2D; procedural effects update using requestAnimationFrame.
+- Canvas is device-pixel-ratio aware (capped at 2) and resizes with the arena.
+- No new runtime dependencies.
+- Original fighter images, arena background and project assets are retained.
+
+VALIDATION
+- TypeScript TSX transpilation: 0 diagnostics.
+- CSS parsing: passed.
+- ZIP integrity: checked after packaging.
+
+HONEST LIMITATIONS
+- This is still a 2D sprite-based game. The existing character images are not skeletal/mesh rigs, so body movement is achieved with the available punch/kick/hurt sprites plus CSS pose choreography. Individual elbows, wrists, fingers, knees and facial animation are not independently rigged.
+- The flame, water, lightning, ice and other power visuals are procedural 2D Canvas effects, not 3D simulations or recorded video.
+- A full dependency-backed production build and real browser/device FPS test could not be run in this environment. Verify the Netlify deployment before treating this as production-performance certified.

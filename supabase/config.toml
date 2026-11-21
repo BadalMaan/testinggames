@@ -1,0 +1,38 @@
+project_id = "global-punjabi-game-arena"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[auth]
+enabled = true
+site_url = "http://localhost:5173"
+additional_redirect_urls = ["http://localhost:5173", "https://YOUR-NETLIFY-SITE.netlify.app"]
+jwt_expiry = 3600
+enable_signup = true
+
+[auth.sms]
+enable_signup = true
+enable_confirmations = true
+template = "Your Global Punjabi Classes verification code is {{ .Code }}"
+
+[functions.start-game]
+verify_jwt = true
+[functions.submit-answer]
+verify_jwt = true
+[functions.finish-game]
+verify_jwt = true
+[functions.admin-manage]
+verify_jwt = true
+[functions.multiplayer]
+verify_jwt = true
+[functions.multiplayer-answer]
+verify_jwt = true
+[functions.daily-challenge]
+verify_jwt = true
+
+[functions.student-settings]
+verify_jwt = true

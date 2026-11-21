@@ -1,0 +1,24 @@
+PUNJABI GAME ARENA — PREMIUM VICTORY REVEAL
+
+This update changes only the end-of-game winner presentation and winner/loser finish-state styling. The two-player turn-based rules, power selection, ATTACK button, health/damage calculation, round progression, rematch, name editing, existing characters and arena background are preserved.
+
+NEW VICTORY PRESENTATION
+- Full-arena cinematic dim with a soft winner-coloured spotlight
+- Rotating radial light rays and layered animated halo rings
+- Dual orbital rings behind the victory title
+- Animated winner-coloured confetti and timed fireworks
+- Premium crest/crown medallion above the champion name
+- Refined VICTORY / ARENA CHAMPION title card and subtitle
+- Winning fighter receives a champion glow and subtle rise animation
+- Defeated fighter is gently dimmed and desaturated for contrast
+- Blue and red winner palettes are automatically selected
+- Responsive layout and reduced-motion fallback
+
+FILES CHANGED
+- src/components/SuperheroClash.tsx
+- src/style.css
+
+VALIDATION
+- TypeScript TSX transpilation: 0 diagnostics
+- CSS parse: passed
+- Full Vite production build and live browser/device test were not run because project node_modules are not installed in this environment.

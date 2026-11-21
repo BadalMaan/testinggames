@@ -1,0 +1,83 @@
+{
+  "game_question_minimum": 50,
+  "requirements": {
+    "varnmala": {
+      "questions": 50
+    },
+    "matra": {
+      "primary_words_per_matra": 50,
+      "matras": [
+        "mukta",
+        "kanna",
+        "sihari",
+        "bihari",
+        "aunkar",
+        "dulankar",
+        "lavan",
+        "dulavan",
+        "hora",
+        "kanaura",
+        "tippi",
+        "bindi",
+        "addak"
+      ]
+    },
+    "reading": {
+      "words": 100
+    },
+    "word-builder": {
+      "challenges": 100
+    },
+    "english-punjabi": {
+      "questions": 100
+    },
+    "punjabi-english": {
+      "questions": 100
+    },
+    "tenses": {
+      "questions": 100,
+      "distribution": {
+        "present": 35,
+        "past": 35,
+        "future": 30
+      }
+    },
+    "vocabulary": {
+      "words_per_topic": 100,
+      "topics": [
+        "fruits",
+        "vegetables",
+        "animals",
+        "birds",
+        "colours",
+        "body-parts",
+        "family-relations",
+        "school-objects",
+        "household-objects",
+        "food",
+        "clothing",
+        "transport",
+        "nature",
+        "weather",
+        "numbers",
+        "days",
+        "months",
+        "emotions",
+        "occupations",
+        "places"
+      ]
+    },
+    "picture-matching": {
+      "questions": 100
+    },
+    "sentence-master": {
+      "questions": 100
+    },
+    "conversation": {
+      "scenarios": 100
+    },
+    "grammar": {
+      "questions": 100
+    }
+  }
+}

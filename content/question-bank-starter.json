@@ -1,0 +1,1052 @@
+[
+  {
+    "game_id": "varnmala",
+    "prompt": "Which letter starts ਕਮਲ?",
+    "prompt_language": "pa",
+    "answer": "ਕ",
+    "options": [
+      "ਕ",
+      "ਮ",
+      "ਲ",
+      "ਸ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "varnmala",
+    "prompt": "Which letter starts ਘਰ?",
+    "prompt_language": "pa",
+    "answer": "ਘ",
+    "options": [
+      "ਰ",
+      "ਗ",
+      "ਘ",
+      "ਹ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "varnmala",
+    "prompt": "Which letter starts ਸੇਬ?",
+    "prompt_language": "pa",
+    "answer": "ਸ",
+    "options": [
+      "ਬ",
+      "ਸ",
+      "ੇ",
+      "ਕ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "varnmala",
+    "prompt": "Which letter starts ਮੋਰ?",
+    "prompt_language": "pa",
+    "answer": "ਮ",
+    "options": [
+      "ਰ",
+      "ਮ",
+      "ਵ",
+      "ਨ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "varnmala",
+    "prompt": "Which letter starts ਫਲ?",
+    "prompt_language": "pa",
+    "answer": "ਫ",
+    "options": [
+      "ਲ",
+      "ਫ",
+      "ਪ",
+      "ਬ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "matra",
+    "prompt": "Which word contains Kanna (ਾ)?",
+    "prompt_language": "pa",
+    "answer": "ਕਾਲਾ",
+    "options": [
+      "ਕਿਤਾਬ",
+      "ਕਾਲਾ",
+      "ਕੁੱਤਾ",
+      "ਸੇਬ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "matra",
+    "prompt": "Choose the word with Sihari (ਿ).",
+    "prompt_language": "pa",
+    "answer": "ਦਿਨ",
+    "options": [
+      "ਪੀਲਾ",
+      "ਦਿਨ",
+      "ਮੋਰ",
+      "ਘਰ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "matra",
+    "prompt": "Which word contains Bihari (ੀ)?",
+    "prompt_language": "pa",
+    "answer": "ਖੀਰ",
+    "options": [
+      "ਖੀਰ",
+      "ਕਮਲ",
+      "ਨਲ",
+      "ਫਲ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "matra",
+    "prompt": "Choose the word with Lavan (ੇ).",
+    "prompt_language": "pa",
+    "answer": "ਸੇਬ",
+    "options": [
+      "ਮੋਰ",
+      "ਸੇਬ",
+      "ਕੁੱਤਾ",
+      "ਦਿਨ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "matra",
+    "prompt": "Which word contains Hora (ੋ)?",
+    "prompt_language": "pa",
+    "answer": "ਰੋਟੀ",
+    "options": [
+      "ਰੋਟੀ",
+      "ਕਿਤਾਬ",
+      "ਘਰ",
+      "ਪਾਣੀ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "reading",
+    "prompt": "What does ਘਰ mean?",
+    "prompt_language": "pa",
+    "answer": "House",
+    "options": [
+      "House",
+      "Flower",
+      "Water",
+      "School"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "reading",
+    "prompt": "What does ਫਲ mean?",
+    "prompt_language": "pa",
+    "answer": "Fruit",
+    "options": [
+      "Book",
+      "Fruit",
+      "Bird",
+      "Milk"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "reading",
+    "prompt": "What does ਕਿਤਾਬ mean?",
+    "prompt_language": "pa",
+    "answer": "Book",
+    "options": [
+      "Pencil",
+      "Table",
+      "Book",
+      "Chair"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "reading",
+    "prompt": "What does ਪਾਣੀ mean?",
+    "prompt_language": "pa",
+    "answer": "Water",
+    "options": [
+      "Water",
+      "Food",
+      "Sun",
+      "Moon"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "reading",
+    "prompt": "What does ਮੋਰ mean?",
+    "prompt_language": "pa",
+    "answer": "Peacock",
+    "options": [
+      "Horse",
+      "Peacock",
+      "Tiger",
+      "Rabbit"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "word-builder",
+    "prompt": "Build KAMAL.",
+    "prompt_language": "en",
+    "answer": "ਕਮਲ",
+    "options": [
+      "ਕਮਲ",
+      "ਕਲਮ",
+      "ਮਲਕ",
+      "ਕਮਾਲ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "word-builder",
+    "prompt": "Build GHAR.",
+    "prompt_language": "en",
+    "answer": "ਘਰ",
+    "options": [
+      "ਘਰ",
+      "ਗਰ",
+      "ਹਰ",
+      "ਘਾਰ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "word-builder",
+    "prompt": "Build SEB.",
+    "prompt_language": "en",
+    "answer": "ਸੇਬ",
+    "options": [
+      "ਸੇਬ",
+      "ਸਬ",
+      "ਸਾਬ",
+      "ਸਿਬ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "word-builder",
+    "prompt": "Build MOR.",
+    "prompt_language": "en",
+    "answer": "ਮੋਰ",
+    "options": [
+      "ਮੋਰ",
+      "ਮਰ",
+      "ਮੂਰ",
+      "ਮੋੜ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "word-builder",
+    "prompt": "Build PHAL.",
+    "prompt_language": "en",
+    "answer": "ਫਲ",
+    "options": [
+      "ਫਲ",
+      "ਫੱਲ",
+      "ਪਲ",
+      "ਫਾਲ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "english-punjabi",
+    "prompt": "This is my book.",
+    "prompt_language": "en",
+    "answer": "Eh meri kitab hai.",
+    "options": [
+      "Eh meri kitab hai.",
+      "Eh mera ghar hai.",
+      "Meri eh kitab han.",
+      "Oh meri kitab hai."
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "english-punjabi",
+    "prompt": "Where are you going?",
+    "prompt_language": "en",
+    "answer": "Tusi kithe ja rahe ho?",
+    "options": [
+      "Tusi ki kar rahe ho?",
+      "Tusi kithe ja rahe ho?",
+      "Tusi kadon aoge?",
+      "Tusi kithe ho?"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "english-punjabi",
+    "prompt": "Please sit down.",
+    "prompt_language": "en",
+    "answer": "Kirpa karke baith jao.",
+    "options": [
+      "Kirpa karke khade ho jao.",
+      "Kirpa karke baith jao.",
+      "Darwaza kholo.",
+      "Ithe aao."
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "english-punjabi",
+    "prompt": "I am hungry.",
+    "prompt_language": "en",
+    "answer": "Mainu bhukh laggi hai.",
+    "options": [
+      "Main thak gaya haan.",
+      "Mainu bhukh laggi hai.",
+      "Main khana bana reha haan.",
+      "Main khush haan."
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "english-punjabi",
+    "prompt": "Give me water.",
+    "prompt_language": "en",
+    "answer": "Mainu paani deo.",
+    "options": [
+      "Mainu paani deo.",
+      "Mainu kitab deo.",
+      "Paani le aao.",
+      "Main paani pee reha haan."
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "punjabi-english",
+    "prompt": "ਇਹ ਮੇਰੀ ਕਿਤਾਬ ਹੈ।",
+    "prompt_language": "pa",
+    "answer": "This is my book.",
+    "options": [
+      "This is my book.",
+      "This is my bag.",
+      "That is my book.",
+      "I have a pen."
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "punjabi-english",
+    "prompt": "ਘਰ",
+    "prompt_language": "pa",
+    "answer": "House",
+    "options": [
+      "House",
+      "School",
+      "Garden",
+      "Room"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "punjabi-english",
+    "prompt": "ਮੈਂ ਸਕੂਲ ਜਾ ਰਿਹਾ ਹਾਂ।",
+    "prompt_language": "pa",
+    "answer": "I am going to school.",
+    "options": [
+      "I am going to school.",
+      "I went to school.",
+      "I am at home.",
+      "I will go tomorrow."
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "punjabi-english",
+    "prompt": "ਪਾਣੀ",
+    "prompt_language": "pa",
+    "answer": "Water",
+    "options": [
+      "Milk",
+      "Water",
+      "Juice",
+      "Tea"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "punjabi-english",
+    "prompt": "ਤੁਸੀਂ ਕਿਵੇਂ ਹੋ?",
+    "prompt_language": "pa",
+    "answer": "How are you?",
+    "options": [
+      "Where are you?",
+      "How are you?",
+      "What is your name?",
+      "Where are you going?"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "tenses",
+    "prompt": "I am playing.",
+    "prompt_language": "en",
+    "answer": "Main khed reha haan.",
+    "options": [
+      "Main khed reha haan.",
+      "Main khed reha si.",
+      "Main khedanga.",
+      "Main khed chukka haan."
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "tenses",
+    "prompt": "I was studying.",
+    "prompt_language": "en",
+    "answer": "Main padh reha si.",
+    "options": [
+      "Main padhanga.",
+      "Main padh reha si.",
+      "Main padh reha haan.",
+      "Main school javanga."
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "tenses",
+    "prompt": "I will go.",
+    "prompt_language": "en",
+    "answer": "Main javanga.",
+    "options": [
+      "Main geya si.",
+      "Main ja reha haan.",
+      "Main javanga.",
+      "Main aa reha haan."
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "tenses",
+    "prompt": "She is cooking.",
+    "prompt_language": "en",
+    "answer": "Oh khana bana rahi hai.",
+    "options": [
+      "Oh khana bana reha hai.",
+      "Oh khana bana rahi hai.",
+      "Oh khana banavegi.",
+      "Oh khana bana rahi si."
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "tenses",
+    "prompt": "They were playing.",
+    "prompt_language": "en",
+    "answer": "Oh khed rahe san.",
+    "options": [
+      "Oh khed rahe han.",
+      "Oh khedange.",
+      "Oh khed rahe san.",
+      "Oh khed reha si."
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "vocabulary",
+    "prompt": "Apple in Punjabi?",
+    "prompt_language": "en",
+    "answer": "ਸੇਬ",
+    "options": [
+      "ਅੰਬ",
+      "ਸੇਬ",
+      "ਕੇਲਾ",
+      "ਅੰਗੂਰ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "vocabulary",
+    "prompt": "House in Punjabi?",
+    "prompt_language": "en",
+    "answer": "ਘਰ",
+    "options": [
+      "ਘਰ",
+      "ਸਕੂਲ",
+      "ਕਿਤਾਬ",
+      "ਮੇਜ਼"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "vocabulary",
+    "prompt": "Water in Punjabi?",
+    "prompt_language": "en",
+    "answer": "ਪਾਣੀ",
+    "options": [
+      "ਦੁੱਧ",
+      "ਚਾਹ",
+      "ਪਾਣੀ",
+      "ਰੋਟੀ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "vocabulary",
+    "prompt": "Book in Punjabi?",
+    "prompt_language": "en",
+    "answer": "ਕਿਤਾਬ",
+    "options": [
+      "ਕੁਰਸੀ",
+      "ਕਿਤਾਬ",
+      "ਪੈਨ",
+      "ਬੈਗ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "vocabulary",
+    "prompt": "Peacock in Punjabi?",
+    "prompt_language": "en",
+    "answer": "ਮੋਰ",
+    "options": [
+      "ਘੋੜਾ",
+      "ਮੋਰ",
+      "ਸ਼ੇਰ",
+      "ਹਾਥੀ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "picture-matching",
+    "prompt": "Punjabi word for Elephant?",
+    "prompt_language": "en",
+    "answer": "ਹਾਥੀ",
+    "options": [
+      "ਹਾਥੀ",
+      "ਘੋੜਾ",
+      "ਸ਼ੇਰ",
+      "ਖਰਗੋਸ਼"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "picture-matching",
+    "prompt": "Punjabi word for Banana?",
+    "prompt_language": "en",
+    "answer": "ਕੇਲਾ",
+    "options": [
+      "ਸੇਬ",
+      "ਕੇਲਾ",
+      "ਅੰਬ",
+      "ਅੰਗੂਰ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "picture-matching",
+    "prompt": "Punjabi word for Chair?",
+    "prompt_language": "en",
+    "answer": "ਕੁਰਸੀ",
+    "options": [
+      "ਮੇਜ਼",
+      "ਕੁਰਸੀ",
+      "ਕਿਤਾਬ",
+      "ਪੈਨ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "picture-matching",
+    "prompt": "Punjabi word for Flower?",
+    "prompt_language": "en",
+    "answer": "ਫੁੱਲ",
+    "options": [
+      "ਫੁੱਲ",
+      "ਫਲ",
+      "ਪੱਤਾ",
+      "ਰੁੱਖ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "picture-matching",
+    "prompt": "Punjabi word for Horse?",
+    "prompt_language": "en",
+    "answer": "ਘੋੜਾ",
+    "options": [
+      "ਬਿੱਲੀ",
+      "ਕੁੱਤਾ",
+      "ਘੋੜਾ",
+      "ਮੋਰ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "sentence-master",
+    "prompt": "Choose correct translation: This is a table.",
+    "prompt_language": "en",
+    "answer": "Eh mez hai.",
+    "options": [
+      "Eh mez hai.",
+      "Mez eh hai?",
+      "Hai eh kursi.",
+      "Eh kursi han."
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "sentence-master",
+    "prompt": "You are my friend.",
+    "prompt_language": "en",
+    "answer": "Tusi mere dost ho.",
+    "options": [
+      "Tusi mere dost ho.",
+      "Main tuhade dost haan.",
+      "Oh mera dost hai.",
+      "Tusi kithe ho."
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "sentence-master",
+    "prompt": "Open the door.",
+    "prompt_language": "en",
+    "answer": "Darwaza kholo.",
+    "options": [
+      "Darwaza kholo.",
+      "Darwaza band karo.",
+      "Ithe baitho.",
+      "Paani peeo."
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "sentence-master",
+    "prompt": "We are going home.",
+    "prompt_language": "en",
+    "answer": "Asi ghar ja rahe haan.",
+    "options": [
+      "Asi ghar ja rahe haan.",
+      "Asi ghar gaye si.",
+      "Oh ghar ja reha hai.",
+      "Main ghar javanga."
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "sentence-master",
+    "prompt": "Arrange: Hai / Eh / Mez",
+    "prompt_language": "en",
+    "answer": "Eh mez hai.",
+    "options": [
+      "Eh mez hai.",
+      "Mez hai eh.",
+      "Hai mez eh.",
+      "Eh hai mez?"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "conversation",
+    "prompt": "What does “Tuhada naam ki hai?” mean?",
+    "prompt_language": "en",
+    "answer": "What is your name?",
+    "options": [
+      "Where do you live?",
+      "What is your name?",
+      "How old are you?",
+      "What are you doing?"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "conversation",
+    "prompt": "How do you say “Come here”?",
+    "prompt_language": "en",
+    "answer": "Ithe aao.",
+    "options": [
+      "Ithe aao.",
+      "Othe jao.",
+      "Baith jao.",
+      "Darwaza kholo."
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "conversation",
+    "prompt": "How do you ask “May I drink water?”",
+    "prompt_language": "en",
+    "answer": "Ki main paani pee sakda/sakdi haan?",
+    "options": [
+      "Ki main paani pee sakda/sakdi haan?",
+      "Mainu paani chahida hai.",
+      "Tusi paani peeo.",
+      "Paani kithe hai?"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "conversation",
+    "prompt": "What does “Tusi ki kar rahe ho?” mean?",
+    "prompt_language": "en",
+    "answer": "What are you doing?",
+    "options": [
+      "Where are you going?",
+      "What are you doing?",
+      "Who are you?",
+      "Are you hungry?"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "conversation",
+    "prompt": "How do you say “Thank you”?",
+    "prompt_language": "en",
+    "answer": "Dhanvaad",
+    "options": [
+      "Dhanvaad",
+      "Sat Sri Akal",
+      "Shubh raatri",
+      "Kirpa karke"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "listening",
+    "prompt": "“Sat Sri Akal” is used as…",
+    "prompt_language": "en",
+    "answer": "A greeting",
+    "options": [
+      "A greeting",
+      "A goodbye",
+      "A food",
+      "A colour"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "listening",
+    "prompt": "“Paani” means…",
+    "prompt_language": "en",
+    "answer": "Water",
+    "options": [
+      "Bread",
+      "Water",
+      "Milk",
+      "Book"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "listening",
+    "prompt": "“Dhanvaad” means…",
+    "prompt_language": "en",
+    "answer": "Thank you",
+    "options": [
+      "Please",
+      "Sorry",
+      "Thank you",
+      "Welcome"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "listening",
+    "prompt": "“Ithe aao” means…",
+    "prompt_language": "en",
+    "answer": "Come here",
+    "options": [
+      "Come here",
+      "Go there",
+      "Sit down",
+      "Stand up"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "listening",
+    "prompt": "“Shubh raatri” means…",
+    "prompt_language": "en",
+    "answer": "Good night",
+    "options": [
+      "Good morning",
+      "Good night",
+      "Good afternoon",
+      "Goodbye"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "speaking",
+    "prompt": "How would you introduce yourself?",
+    "prompt_language": "en",
+    "answer": "Mera naam ___ hai.",
+    "options": [
+      "Mera naam ___ hai.",
+      "Main school ja reha haan.",
+      "Eh meri kitab hai.",
+      "Mainu paani chahida hai."
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "speaking",
+    "prompt": "Say “I am happy”.",
+    "prompt_language": "en",
+    "answer": "Main khush haan.",
+    "options": [
+      "Main khush haan.",
+      "Main thak gaya haan.",
+      "Mainu bhukh laggi hai.",
+      "Main ghar haan."
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "speaking",
+    "prompt": "Say “I like mangoes”.",
+    "prompt_language": "en",
+    "answer": "Mainu amb pasand han.",
+    "options": [
+      "Mainu amb pasand han.",
+      "Mainu seb pasand hai.",
+      "Main amb kha reha haan.",
+      "Amb kithe han?"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "speaking",
+    "prompt": "Say “My family”.",
+    "prompt_language": "en",
+    "answer": "Mera parivaar.",
+    "options": [
+      "Mera parivaar.",
+      "Mera school.",
+      "Mera dost.",
+      "Meri kitab."
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "speaking",
+    "prompt": "Say “What is your name?”",
+    "prompt_language": "en",
+    "answer": "Tuhada naam ki hai?",
+    "options": [
+      "Tuhada naam ki hai?",
+      "Tusi kithe ho?",
+      "Tusi ki kar rahe ho?",
+      "Tusi kiven ho?"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "grammar",
+    "prompt": "Respectful pronoun for “you”?",
+    "prompt_language": "en",
+    "answer": "Tusi",
+    "options": [
+      "Tusi",
+      "Main",
+      "Oh",
+      "Asi"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "grammar",
+    "prompt": "Feminine form: I am going (female speaker).",
+    "prompt_language": "en",
+    "answer": "Main ja rahi haan.",
+    "options": [
+      "Main ja reha haan.",
+      "Main ja rahi haan.",
+      "Main javanga.",
+      "Main geya si."
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "grammar",
+    "prompt": "Which means “we”?",
+    "prompt_language": "en",
+    "answer": "Asi",
+    "options": [
+      "Main",
+      "Tusi",
+      "Asi",
+      "Oh"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "grammar",
+    "prompt": "Which pronoun means “they”?",
+    "prompt_language": "en",
+    "answer": "Oh",
+    "options": [
+      "Oh",
+      "Asi",
+      "Main",
+      "Tu"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "grammar",
+    "prompt": "Which question word means “where”?",
+    "prompt_language": "en",
+    "answer": "Kithe",
+    "options": [
+      "Ki",
+      "Kithe",
+      "Kyon",
+      "Kado"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "multiplayer",
+    "prompt": "What is “Book” in Punjabi?",
+    "prompt_language": "en",
+    "answer": "ਕਿਤਾਬ",
+    "options": [
+      "ਕਿਤਾਬ",
+      "ਘਰ",
+      "ਪਾਣੀ",
+      "ਫਲ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "multiplayer",
+    "prompt": "What is “Thank you” in Punjabi?",
+    "prompt_language": "en",
+    "answer": "Dhanvaad",
+    "options": [
+      "Dhanvaad",
+      "Sat Sri Akal",
+      "Shubh raatri",
+      "Kirpa karke"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "multiplayer",
+    "prompt": "Which word means “House”?",
+    "prompt_language": "en",
+    "answer": "ਘਰ",
+    "options": [
+      "ਘਰ",
+      "ਫਲ",
+      "ਮੋਰ",
+      "ਕਿਤਾਬ"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "multiplayer",
+    "prompt": "Which is the Punjabi greeting?",
+    "prompt_language": "en",
+    "answer": "Sat Sri Akal",
+    "options": [
+      "Sat Sri Akal",
+      "Dhanvaad",
+      "Shubh raatri",
+      "Paani"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  },
+  {
+    "game_id": "multiplayer",
+    "prompt": "What does “Kithe” mean?",
+    "prompt_language": "en",
+    "answer": "Where",
+    "options": [
+      "Where",
+      "What",
+      "Who",
+      "When"
+    ],
+    "difficulty": "easy",
+    "content_status": "draft"
+  }
+]

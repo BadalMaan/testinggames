@@ -1,0 +1,14 @@
+POWER VISIBILITY POLISH — 19 NOV 2026
+
+This is a visual readability pass on the existing procedural Canvas power renderer. It does not change turn selection, player names, ATTACK flow, health/damage rules, rounds, hero artwork or arena background.
+
+Changes:
+- Repositioned projectile origins slightly toward the visible extended-hand area.
+- Increased charge silhouette size and opacity so selected powers are visible before launch.
+- Increased travelling projectile scale and kept the two projectiles vertically separated as they approach the clash, avoiding a single merged dot.
+- Added wide, layered, moving wake strands for Plasma, Solar, Shadow and generic powers; retained dedicated fire, lightning, water and ice trails.
+- Enlarged collision rings and impact shockwave, with radial impact rays and more visible sparks.
+- Increased the winning projectile size on its path to the target.
+- No power PNG or SVG files are loaded by the combat canvas.
+
+Validation: TypeScript transpilation and CSS parser checks are run before packaging. Full Vite production build and real-browser FPS testing are not available in this environment.

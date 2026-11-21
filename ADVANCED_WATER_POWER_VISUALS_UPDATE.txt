@@ -1,0 +1,26 @@
+PUNJABI GAME ARENA — ADVANCED WATER POWER VISUAL UPDATE
+
+Built from the latest project archive already shared in this conversation:
+Punjabi-Game-Arena-POWER-RENDERING-FIX.zip
+
+Screenshot-driven issue:
+The Ocean Spiral and Tidal Dragon effects were washing out into large white shapes on the bright arena. The attack renderer used additive blending and near-white fills/highlights, obscuring the intended power identity.
+
+Changes:
+- Changed the main attack silhouette compositing from additive to source-over so saturated power colors remain visible.
+- Rebuilt Ocean Spiral as a deep-blue/cyan rotating vortex with multiple elliptical spiral bands, a dark water core, and distinct spray particles.
+- Reworked Tidal Dragon palette into saturated blue/cyan layers, with a stronger layered serpentine body and more restrained highlights.
+- Changed Tidal Dragon wake from screen blending to source-over and increased the visibility of blue/cyan water ribbons.
+- Increased saturation and thickness of generic water wake strands.
+- Changed generic power-wake endpoint gradient from white to the selected power color to avoid white arrow-like trails.
+
+Preserved:
+- Original character artwork and arena/background.
+- Existing turn-based selection, name editing, Attack action, round/damage/health/win rules and interface.
+- Existing power selection data and all other power branches.
+
+Validation:
+- TSX transpilation: passed with zero diagnostics.
+- CSS parsing: passed.
+- ZIP integrity: checked after packaging.
+- Full Vite production build and live browser/FPS testing were not run in this environment.

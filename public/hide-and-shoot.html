@@ -1,0 +1,1901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hide and Shoot — Global Punjabi Classes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,600;0,700;1,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100dvh;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(180deg, #dbeafe 0%, #e2e8f0 58%, #cbd5e1 100%);
+      color: #0f172a;
+      overflow-x: hidden;
+    }
+
+    .font-display {
+      font-family: 'Chakra Petch', sans-serif;
+    }
+
+    @keyframes screen-quake {
+      0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+      14% { transform: translate3d(-10px, 5px, 0) rotate(-0.6deg); }
+      28% { transform: translate3d(10px, -6px, 0) rotate(0.6deg); }
+      42% { transform: translate3d(-8px, -4px, 0) rotate(-0.4deg); }
+      56% { transform: translate3d(7px, 4px, 0) rotate(0.35deg); }
+      70% { transform: translate3d(-4px, 2px, 0) rotate(-0.2deg); }
+      85% { transform: translate3d(2px, -1px, 0) rotate(0.1deg); }
+    }
+
+    .arena-quake {
+      animation: screen-quake 460ms cubic-bezier(0.36, 0.07, 0.19, 0.97);
+    }
+
+    @keyframes win-flash {
+      0% { opacity: 0.72; }
+      100% { opacity: 0; }
+    }
+
+    .win-flash-overlay {
+      animation: win-flash 950ms ease-out forwards;
+    }
+
+    @keyframes champion-pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 22px 45px rgba(217, 119, 6, 0.28); }
+      50% { transform: scale(1.025); box-shadow: 0 28px 60px rgba(245, 158, 11, 0.45); }
+    }
+
+    .champion-card-glow {
+      animation: champion-pulse 1.8s ease-in-out infinite;
+    }
+
+    /* Compact Bottom 1 2 3 4 Shoot Triggers */
+    .shot-trigger {
+      background: linear-gradient(180deg, #ffffff 0%, #fde68a 100%);
+      border: 2px solid #92400e;
+      box-shadow:
+        0 4px 0 #78350f,
+        0 8px 14px rgba(120, 53, 15, 0.22),
+        inset 0 2px 0 rgba(255, 255, 255, 0.9);
+      transition: transform 120ms ease, box-shadow 140ms ease, border-color 140ms ease, background 140ms ease, opacity 140ms ease;
+    }
+
+    .shot-trigger:not(:disabled):hover {
+      transform: translateY(-2px);
+      border-color: #d97706;
+      background: linear-gradient(180deg, #ffffff 0%, #fcd34d 100%);
+      box-shadow:
+        0 6px 0 #78350f,
+        0 12px 18px rgba(120, 53, 15, 0.28),
+        0 0 14px rgba(245, 158, 11, 0.4);
+    }
+
+    .shot-trigger:not(:disabled):active {
+      transform: translateY(2px);
+      box-shadow:
+        0 2px 0 #78350f,
+        0 4px 8px rgba(120, 53, 15, 0.2);
+    }
+
+    .shot-trigger:disabled {
+      opacity: 0.42;
+      cursor: not-allowed;
+    }
+
+    .shot-trigger.shot-missed {
+      border-color: #e11d48;
+      background: linear-gradient(180deg, #ffe4e6 0%, #fecdd3 100%);
+      box-shadow: 0 3px 0 #9f1239;
+    }
+
+    .shot-trigger.shot-hit {
+      border-color: #059669;
+      background: linear-gradient(180deg, #d1fae5 0%, #a7f3d0 100%);
+      box-shadow: 0 3px 0 #065f46;
+    }
+
+    @keyframes pop-in {
+      0% { opacity: 0; transform: scale(0.92) translateY(10px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .animate-pop-in {
+      animation: pop-in 240ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* PREMIUM COOL-STONE SKIN */
+    body {
+      background: radial-gradient(ellipse at 50% -15%, #dbeafe 0%, #e7eef7 42%, #cbd5e1 100%);
+      color: #172033;
+    }
+    header {
+      background: rgba(241, 247, 255, .94) !important;
+      border-color: rgba(51, 65, 85, .18) !important;
+      box-shadow: 0 8px 28px rgba(15, 23, 42, .10) !important;
+    }
+    #arena-stage {
+      border: 2px solid rgba(148, 163, 184, .72) !important;
+      border-radius: 22px !important;
+      box-shadow: 0 22px 55px rgba(15, 23, 42, .20), inset 0 1px 0 rgba(255,255,255,.8) !important;
+      background: #dbeafe !important;
+    }
+    #p1-card, #p2-card, #phase-pill, #status-prompt,
+    main > section:not(#arena-stage) {
+      filter: saturate(.88);
+    }
+    .shot-trigger {
+      background: linear-gradient(180deg, #ffffff 0%, #dbeafe 100%) !important;
+      border: 1px solid #64748b !important;
+      border-radius: 13px !important;
+      box-shadow: 0 4px 0 #475569, 0 9px 18px rgba(15,23,42,.16), inset 0 1px 0 #fff !important;
+      transition: transform 220ms cubic-bezier(.2,.8,.2,1), box-shadow 220ms ease, filter 220ms ease !important;
+    }
+    .shot-trigger:not(:disabled):hover {
+      background: linear-gradient(180deg, #fff 0%, #bfdbfe 100%) !important;
+      border-color: #2563eb !important;
+      box-shadow: 0 5px 0 #334155, 0 12px 24px rgba(37,99,235,.20) !important;
+    }
+    .shot-trigger:not(:disabled):active { transform: translateY(2px) scale(.985) !important; }
+    button { -webkit-font-smoothing: antialiased; }
+    #btn-start-shooting, #btn-next-round, #btn-rematch {
+      filter: saturate(.82);
+      letter-spacing: .06em;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+
+  </style>
+</head>
+<body class="h-dvh max-h-dvh flex flex-col justify-between overflow-hidden">
+  <!-- Toast Banner -->
+  <div id="toast-container" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none px-4 w-full max-w-sm flex flex-col items-center gap-1.5"></div>
+
+  <!-- Top HUD & Editable Player Cards -->
+  <header class="relative z-30 w-full bg-amber-50/90 backdrop-blur-md border-b border-amber-900/20 shadow-sm shrink-0">
+    <div class="max-w-5xl mx-auto px-3 sm:px-5 py-2 flex flex-col gap-1.5">
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2 min-w-0">
+          <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow shrink-0">
+            <svg class="w-4 h-4 text-slate-950" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="8"></circle>
+              <line x1="12" y1="2" x2="12" y2="6"></line>
+              <line x1="12" y1="18" x2="12" y2="22"></line>
+              <line x1="2" y1="12" x2="6" y2="12"></line>
+              <line x1="18" y1="12" x2="22" y2="12"></line>
+            </svg>
+          </div>
+          <h1 class="font-display text-sm sm:text-lg font-bold tracking-wide text-slate-900 truncate">
+            STONE COVER &amp; SHOT
+          </h1>
+          <span id="round-badge" class="px-2 py-0.5 rounded-full text-[10px] font-display font-bold bg-amber-200/80 text-amber-950 border border-amber-800/20">
+            R1
+          </span>
+        </div>
+
+        <div class="flex items-center gap-1.5 shrink-0">
+          <button
+            id="btn-sound"
+            type="button"
+            class="p-1.5 rounded-lg bg-white/80 hover:bg-white text-slate-800 border border-amber-900/15 transition"
+            aria-label="Toggle Sound"
+          >
+            <svg id="icon-sound-on" class="w-3.5 h-3.5 text-emerald-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+            </svg>
+            <svg id="icon-sound-off" class="w-3.5 h-3.5 text-rose-600 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <line x1="23" y1="9" x2="17" y2="15"></line>
+              <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+          </button>
+
+          <button
+            id="btn-reset-match"
+            type="button"
+            class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-rose-600 hover:bg-rose-500 text-white shadow transition"
+          >
+            Reset
+          </button>
+        </div>
+      </div>
+
+      <!-- Editable Player Cards -->
+      <div class="grid grid-cols-2 gap-2 sm:gap-3">
+        <div id="p1-card" class="rounded-xl bg-white/90 border-2 border-amber-900/15 px-2.5 py-1.5 flex items-center justify-between gap-2 transition-all">
+          <div class="flex items-center gap-2 min-w-0 flex-1">
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-600 shrink-0"></span>
+            <div class="min-w-0 flex-1">
+              <span id="p1-role-tag" class="text-[9px] font-display font-bold uppercase tracking-wider px-1.5 py-0.2 rounded inline-block"></span>
+              <div class="flex items-center gap-1">
+                <input
+                  id="p1-name-input"
+                  type="text"
+                  maxlength="16"
+                  value="Player 1"
+                  aria-label="Edit Player 1 Name"
+                  class="w-full bg-transparent text-xs sm:text-sm font-bold text-slate-900 focus:outline-none focus:bg-amber-100 focus:px-1 rounded"
+                />
+                <svg class="w-3 h-3 text-slate-400 shrink-0 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M12 20h9"></path>
+                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="text-right pl-2 border-l border-amber-900/15 shrink-0">
+            <div id="p1-score" class="font-display text-base sm:text-lg font-bold text-amber-800 leading-none">0</div>
+          </div>
+        </div>
+
+        <div id="p2-card" class="rounded-xl bg-white/90 border-2 border-amber-900/15 px-2.5 py-1.5 flex items-center justify-between gap-2 transition-all">
+          <div class="flex items-center gap-2 min-w-0 flex-1">
+            <span class="w-2.5 h-2.5 rounded-full bg-sky-600 shrink-0"></span>
+            <div class="min-w-0 flex-1">
+              <span id="p2-role-tag" class="text-[9px] font-display font-bold uppercase tracking-wider px-1.5 py-0.2 rounded inline-block"></span>
+              <div class="flex items-center gap-1">
+                <input
+                  id="p2-name-input"
+                  type="text"
+                  maxlength="16"
+                  value="Player 2"
+                  aria-label="Edit Player 2 Name"
+                  class="w-full bg-transparent text-xs sm:text-sm font-bold text-slate-900 focus:outline-none focus:bg-amber-100 focus:px-1 rounded"
+                />
+                <svg class="w-3 h-3 text-slate-400 shrink-0 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M12 20h9"></path>
+                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="text-right pl-2 border-l border-amber-900/15 shrink-0">
+            <div id="p2-score" class="font-display text-base sm:text-lg font-bold text-amber-800 leading-none">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Single-Screen Limestone Terrace Arena -->
+  <main class="relative z-10 flex-1 min-h-0 flex flex-col justify-between w-full px-2.5 sm:px-5 pt-2 pb-2.5 gap-2">
+    <!-- Compact Status & Shots Strip -->
+    <section class="relative z-20 max-w-5xl w-full mx-auto flex items-center justify-between gap-2 rounded-xl bg-white/85 border border-amber-900/15 backdrop-blur-md px-3 py-1.5 shadow-sm shrink-0">
+      <div class="flex items-center gap-2 min-w-0">
+        <span id="phase-pill" class="px-2 py-0.5 rounded-md text-[10px] font-display font-bold tracking-wider uppercase bg-sky-600 text-white shrink-0">
+          HIDE
+        </span>
+        <span id="status-prompt" class="text-xs sm:text-sm font-bold text-slate-900 truncate">
+          Player 1: Pick a block
+        </span>
+      </div>
+
+      <div class="flex items-center gap-1.5 shrink-0">
+        <span id="chance-dot-1" class="w-4 h-2 rounded-full bg-amber-500 transition-all"></span>
+        <span id="chance-dot-2" class="w-4 h-2 rounded-full bg-amber-500 transition-all"></span>
+        <span id="chances-text" class="font-display text-xs font-bold text-amber-900 ml-0.5">2</span>
+      </div>
+    </section>
+
+    <!-- Arena Stage -->
+    <section
+      id="arena-stage"
+      class="relative flex-1 min-h-0 max-w-5xl w-full mx-auto rounded-2xl border-2 border-amber-900/20 bg-sky-100 shadow-xl overflow-hidden"
+    >
+      <canvas id="arena-canvas" class="block w-full h-full cursor-pointer"></canvas>
+
+      <!-- Win Celebration Screen Flash -->
+      <div id="win-flash" class="hidden pointer-events-none absolute inset-0 z-20 bg-amber-200 win-flash-overlay"></div>
+
+      <!-- Handoff Curtain -->
+      <div
+        id="handoff-overlay"
+        class="hidden absolute inset-0 z-20 bg-amber-950/35 backdrop-blur-sm flex items-center justify-center p-4 text-center"
+      >
+        <div class="w-full max-w-xs rounded-2xl bg-amber-50/95 border-2 border-amber-700/40 p-5 text-slate-900 shadow-2xl animate-pop-in">
+          <div id="handoff-title" class="font-display text-lg font-bold text-slate-900"></div>
+          <button
+            id="btn-start-shooting"
+            type="button"
+            class="mt-3.5 w-full py-2.5 px-4 rounded-xl font-display font-bold text-sm tracking-wide bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white shadow-lg transition"
+          >
+            SHOOT
+          </button>
+        </div>
+      </div>
+
+      <!-- Round / Match Win Reaction Overlay -->
+      <div
+        id="round-result-overlay"
+        class="hidden absolute inset-0 z-30 bg-amber-950/40 backdrop-blur-sm flex items-center justify-center p-4 text-center"
+      >
+        <div id="win-card" class="w-full max-w-sm rounded-2xl bg-gradient-to-b from-white via-amber-50 to-amber-100 border-2 border-amber-500 p-5 sm:p-6 text-slate-900 shadow-2xl animate-pop-in">
+          <div id="round-outcome-badge" class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-display font-bold uppercase tracking-wider mb-1.5 bg-amber-400/30 text-amber-950 border border-amber-600/40"></div>
+          <h3 id="round-winner-heading" class="font-display text-2xl sm:text-3xl font-bold text-slate-900 leading-tight"></h3>
+
+          <div class="mt-4 rounded-xl bg-white/90 border border-amber-900/15 p-3 flex items-center justify-around">
+            <div>
+              <div id="summary-p1-label" class="text-[11px] font-semibold text-slate-600 truncate max-w-[95px]">Player 1</div>
+              <div id="summary-p1-score" class="font-display text-xl font-bold text-rose-600">0</div>
+            </div>
+            <div class="h-7 w-px bg-amber-900/15"></div>
+            <div class="font-display text-xs font-bold text-amber-800">TO <span id="target-wins-display">3</span></div>
+            <div class="h-7 w-px bg-amber-900/15"></div>
+            <div>
+              <div id="summary-p2-label" class="text-[11px] font-semibold text-slate-600 truncate max-w-[95px]">Player 2</div>
+              <div id="summary-p2-score" class="font-display text-xl font-bold text-sky-700">0</div>
+            </div>
+          </div>
+
+          <div class="mt-4 flex gap-2">
+            <button
+              id="btn-next-round"
+              type="button"
+              class="flex-1 py-2.5 px-4 rounded-xl font-display font-bold text-sm tracking-wide bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white shadow-lg transition"
+            >
+              NEXT ROUND
+            </button>
+            <button
+              id="btn-rematch"
+              type="button"
+              class="hidden flex-1 py-2.5 px-4 rounded-xl font-display font-bold text-sm tracking-wide bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white shadow-lg transition"
+            >
+              PLAY AGAIN
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Compact Bottom Shoot Buttons: 1  2  3  4 -->
+    <section
+      aria-label="Shoot 1 2 3 4"
+      class="relative z-20 max-w-xl w-full mx-auto shrink-0"
+    >
+      <div class="grid grid-cols-4 gap-2 sm:gap-3">
+        <button id="shoot-btn-1" data-block="1" type="button" disabled class="shot-trigger rounded-xl py-2 sm:py-2.5 flex items-center justify-center">
+          <span class="font-display text-lg sm:text-xl font-bold text-amber-950 leading-none">1</span>
+        </button>
+
+        <button id="shoot-btn-2" data-block="2" type="button" disabled class="shot-trigger rounded-xl py-2 sm:py-2.5 flex items-center justify-center">
+          <span class="font-display text-lg sm:text-xl font-bold text-amber-950 leading-none">2</span>
+        </button>
+
+        <button id="shoot-btn-3" data-block="3" type="button" disabled class="shot-trigger rounded-xl py-2 sm:py-2.5 flex items-center justify-center">
+          <span class="font-display text-lg sm:text-xl font-bold text-amber-950 leading-none">3</span>
+        </button>
+
+        <button id="shoot-btn-4" data-block="4" type="button" disabled class="shot-trigger rounded-xl py-2 sm:py-2.5 flex items-center justify-center">
+          <span class="font-display text-lg sm:text-xl font-bold text-amber-950 leading-none">4</span>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      'use strict';
+
+      // =========================================================================
+      // 1. SOUND ENGINE (Web Audio API)
+      // =========================================================================
+      class TerraceAudio {
+        constructor() {
+          this.ctx = null;
+          this.muted = false;
+          this.noiseBuffer = null;
+        }
+
+        ensureContext() {
+          if (this.muted) return null;
+          if (!this.ctx) {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (!AudioCtx) return null;
+            this.ctx = new AudioCtx();
+            this.noiseBuffer = this.createNoiseBuffer(this.ctx, 1.4);
+          }
+          if (this.ctx.state === 'suspended') {
+            this.ctx.resume().catch(() => {});
+          }
+          return this.ctx;
+        }
+
+        createNoiseBuffer(ctx, seconds) {
+          const length = Math.floor(ctx.sampleRate * seconds);
+          const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < length; i++) {
+            data[i] = Math.random() * 2 - 1;
+          }
+          return buffer;
+        }
+
+        playClick() {
+          const ctx = this.ensureContext();
+          if (!ctx) return;
+          const now = ctx.currentTime;
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(640, now);
+          osc.frequency.exponentialRampToValueAtTime(300, now + 0.05);
+          gain.gain.setValueAtTime(0.14, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.06);
+        }
+
+        playCoverShift() {
+          const ctx = this.ensureContext();
+          if (!ctx) return;
+          const now = ctx.currentTime;
+
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(145, now);
+          osc.frequency.exponentialRampToValueAtTime(48, now + 0.42);
+          gain.gain.setValueAtTime(0.32, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.44);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.46);
+
+          const src = ctx.createBufferSource();
+          src.buffer = this.noiseBuffer;
+          const filter = ctx.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.setValueAtTime(480, now);
+          filter.Q.setValueAtTime(1.1, now);
+          const nGain = ctx.createGain();
+          nGain.gain.setValueAtTime(0.16, now);
+          nGain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+          src.connect(filter);
+          filter.connect(nGain);
+          nGain.connect(ctx.destination);
+          src.start(now);
+          src.stop(now + 0.4);
+        }
+
+        playGunshot() {
+          const ctx = this.ensureContext();
+          if (!ctx) return;
+          const now = ctx.currentTime;
+
+          const crackSrc = ctx.createBufferSource();
+          crackSrc.buffer = this.noiseBuffer;
+          const hp = ctx.createBiquadFilter();
+          hp.type = 'highpass';
+          hp.frequency.setValueAtTime(1750, now);
+          const crackGain = ctx.createGain();
+          crackGain.gain.setValueAtTime(0.52, now);
+          crackGain.gain.exponentialRampToValueAtTime(0.001, now + 0.075);
+          crackSrc.connect(hp);
+          hp.connect(crackGain);
+          crackGain.connect(ctx.destination);
+          crackSrc.start(now);
+          crackSrc.stop(now + 0.08);
+
+          const subOsc = ctx.createOscillator();
+          const subGain = ctx.createGain();
+          subOsc.type = 'sine';
+          subOsc.frequency.setValueAtTime(220, now);
+          subOsc.frequency.exponentialRampToValueAtTime(32, now + 0.24);
+          subGain.gain.setValueAtTime(0.62, now);
+          subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.26);
+          subOsc.connect(subGain);
+          subGain.connect(ctx.destination);
+          subOsc.start(now);
+          subOsc.stop(now + 0.27);
+
+          const barkOsc = ctx.createOscillator();
+          const barkGain = ctx.createGain();
+          barkOsc.type = 'sawtooth';
+          barkOsc.frequency.setValueAtTime(390, now);
+          barkOsc.frequency.exponentialRampToValueAtTime(62, now + 0.13);
+          barkGain.gain.setValueAtTime(0.32, now);
+          barkGain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+          barkOsc.connect(barkGain);
+          barkGain.connect(ctx.destination);
+          barkOsc.start(now);
+          barkOsc.stop(now + 0.15);
+
+          const echoSrc = ctx.createBufferSource();
+          echoSrc.buffer = this.noiseBuffer;
+          const lp = ctx.createBiquadFilter();
+          lp.type = 'lowpass';
+          lp.frequency.setValueAtTime(1450, now);
+          lp.frequency.exponentialRampToValueAtTime(210, now + 0.48);
+          const echoGain = ctx.createGain();
+          echoGain.gain.setValueAtTime(0.001, now);
+          echoGain.gain.linearRampToValueAtTime(0.22, now + 0.02);
+          echoGain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+          echoSrc.connect(lp);
+          lp.connect(echoGain);
+          echoGain.connect(ctx.destination);
+          echoSrc.start(now);
+          echoSrc.stop(now + 0.52);
+        }
+
+        playStoneCrack() {
+          const ctx = this.ensureContext();
+          if (!ctx) return;
+          const now = ctx.currentTime;
+
+          const chipSrc = ctx.createBufferSource();
+          chipSrc.buffer = this.noiseBuffer;
+          const bp = ctx.createBiquadFilter();
+          bp.type = 'bandpass';
+          bp.frequency.setValueAtTime(1900, now);
+          bp.Q.setValueAtTime(1.8, now);
+          const chipGain = ctx.createGain();
+          chipGain.gain.setValueAtTime(0.34, now);
+          chipGain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+          chipSrc.connect(bp);
+          bp.connect(chipGain);
+          chipGain.connect(ctx.destination);
+          chipSrc.start(now);
+          chipSrc.stop(now + 0.19);
+        }
+
+        playStoneShatter() {
+          const ctx = this.ensureContext();
+          if (!ctx) return;
+          const now = ctx.currentTime;
+
+          const rubbleSrc = ctx.createBufferSource();
+          rubbleSrc.buffer = this.noiseBuffer;
+          const filter = ctx.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.setValueAtTime(920, now);
+          filter.frequency.exponentialRampToValueAtTime(190, now + 0.68);
+          filter.Q.setValueAtTime(0.6, now);
+          const rGain = ctx.createGain();
+          rGain.gain.setValueAtTime(0.56, now);
+          rGain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+          rubbleSrc.connect(filter);
+          filter.connect(rGain);
+          rGain.connect(ctx.destination);
+          rubbleSrc.start(now);
+          rubbleSrc.stop(now + 0.72);
+
+          const boom = ctx.createOscillator();
+          const boomGain = ctx.createGain();
+          boom.type = 'sine';
+          boom.frequency.setValueAtTime(165, now);
+          boom.frequency.exponentialRampToValueAtTime(26, now + 0.45);
+          boomGain.gain.setValueAtTime(0.54, now);
+          boomGain.gain.exponentialRampToValueAtTime(0.001, now + 0.48);
+          boom.connect(boomGain);
+          boomGain.connect(ctx.destination);
+          boom.start(now);
+          boom.stop(now + 0.5);
+        }
+
+        playWinFanfare() {
+          const ctx = this.ensureContext();
+          if (!ctx) return;
+          const notes = [523.25, 659.25, 783.99, 1046.5, 1318.5];
+          notes.forEach((freq, idx) => {
+            const now = ctx.currentTime + idx * 0.075;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now);
+            gain.gain.setValueAtTime(0.18, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.34);
+          });
+        }
+      }
+
+      const audio = new TerraceAudio();
+
+      // =========================================================================
+      // 2. GAME STATE
+      // =========================================================================
+      const TARGET_WINS = 3;
+      const MAX_CHANCES = 2;
+
+      const state = {
+        players: {
+          1: { name: 'Player 1', score: 0 },
+          2: { name: 'Player 2', score: 0 }
+        },
+        round: 1,
+        hiderId: 1,
+        shooterId: 2,
+        phase: 'HIDE', // 'HIDE' | 'TUCKING' | 'HANDOFF' | 'SHOOT' | 'ANIMATING' | 'ROUND_END'
+        hiddenBlock: null,
+        hidePeekProgress: 0, // 0 -> 1 brief tuck-in animation inside selected block
+        coverShiftProgress: 0, // 0 -> 1 deep backward shift along terrace
+        targetCoverShift: 0,
+        hoveredBlock: null,
+        crackedBlocks: new Set(),
+        shatteredBlocks: new Set(),
+        chancesLeft: MAX_CHANCES,
+        lastRoundOutcome: null,
+        matchWinnerId: null,
+        foundCharacter: false // True when shooter's bullet finds & reveals the hiding character
+      };
+
+      // =========================================================================
+      // 3. DOM ELEMENTS
+      // =========================================================================
+      const els = {
+        roundBadge: document.getElementById('round-badge'),
+        p1Card: document.getElementById('p1-card'),
+        p2Card: document.getElementById('p2-card'),
+        p1NameInput: document.getElementById('p1-name-input'),
+        p2NameInput: document.getElementById('p2-name-input'),
+        p1RoleTag: document.getElementById('p1-role-tag'),
+        p2RoleTag: document.getElementById('p2-role-tag'),
+        p1Score: document.getElementById('p1-score'),
+        p2Score: document.getElementById('p2-score'),
+
+        phasePill: document.getElementById('phase-pill'),
+        statusPrompt: document.getElementById('status-prompt'),
+        chanceDot1: document.getElementById('chance-dot-1'),
+        chanceDot2: document.getElementById('chance-dot-2'),
+        chancesText: document.getElementById('chances-text'),
+
+        arenaStage: document.getElementById('arena-stage'),
+        arenaCanvas: document.getElementById('arena-canvas'),
+        winFlash: document.getElementById('win-flash'),
+
+        handoffOverlay: document.getElementById('handoff-overlay'),
+        handoffTitle: document.getElementById('handoff-title'),
+        btnStartShooting: document.getElementById('btn-start-shooting'),
+
+        roundResultOverlay: document.getElementById('round-result-overlay'),
+        roundOutcomeBadge: document.getElementById('round-outcome-badge'),
+        roundWinnerHeading: document.getElementById('round-winner-heading'),
+        summaryP1Label: document.getElementById('summary-p1-label'),
+        summaryP2Label: document.getElementById('summary-p2-label'),
+        summaryP1Score: document.getElementById('summary-p1-score'),
+        summaryP2Score: document.getElementById('summary-p2-score'),
+        targetWinsDisplay: document.getElementById('target-wins-display'),
+        btnNextRound: document.getElementById('btn-next-round'),
+        btnRematch: document.getElementById('btn-rematch'),
+
+        shotButtons: [1, 2, 3, 4].map((n) => document.getElementById(`shoot-btn-${n}`)),
+
+        btnSound: document.getElementById('btn-sound'),
+        iconSoundOn: document.getElementById('icon-sound-on'),
+        iconSoundOff: document.getElementById('icon-sound-off'),
+        btnResetMatch: document.getElementById('btn-reset-match'),
+        toastContainer: document.getElementById('toast-container')
+      };
+
+      // =========================================================================
+      // 4. GOLDEN-HOUR LIMESTONE TERRACE, TALL BLOCKS & BREAKAGE FX ENGINE
+      // =========================================================================
+      const ctx = els.arenaCanvas.getContext('2d');
+      let stageW = 800;
+      let stageH = 420;
+      let blockHitboxes = [];
+      let bullets = [];
+      let slabs = [];
+      let dustPuffs = [];
+      let sparks = [];
+      let confetti = [];
+      let dustMotes = [];
+      let animLoopId = null;
+      let lastTime = performance.now();
+      let cinematicUntil = 0;
+
+      function initDustMotes() {
+        dustMotes = [];
+        for (let i = 0; i < 26; i++) {
+          dustMotes.push({
+            x: Math.random() * 1000,
+            y: Math.random() * 600,
+            r: 1 + Math.random() * 2.2,
+            vx: 6 + Math.random() * 14,
+            vy: -4 + Math.random() * 8,
+            alpha: 0.25 + Math.random() * 0.45
+          });
+        }
+      }
+      initDustMotes();
+
+      function resizeCanvas() {
+        const rect = els.arenaStage.getBoundingClientRect();
+        stageW = Math.max(320, rect.width);
+        stageH = Math.max(240, rect.height);
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        els.arenaCanvas.width = Math.floor(stageW * dpr);
+        els.arenaCanvas.height = Math.floor(stageH * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        computeBlockHitboxes();
+        ensureRenderLoop();
+      }
+
+      function triggerScreenQuake() {
+        els.arenaStage.classList.remove('arena-quake');
+        void els.arenaStage.offsetWidth;
+        els.arenaStage.classList.add('arena-quake');
+      }
+      function triggerWinCelebration(cx, cy, isChampion = false) {
+        els.winFlash.classList.remove('hidden', 'win-flash-overlay');
+        void els.winFlash.offsetWidth;
+        els.winFlash.classList.remove('hidden');
+        els.winFlash.classList.add('win-flash-overlay');
+
+        const colors = ['#f59e0b', '#10b981', '#0ea5e9', '#f43f5e', '#facc15', '#a855f7'];
+        const count = isChampion ? 130 : 65;
+        for (let i = 0; i < count; i++) {
+          const ang = -Math.PI * Math.random();
+          const spd = (isChampion ? 95 : 70) + Math.random() * (isChampion ? 290 : 210);
+          confetti.push({
+            x: cx + (Math.random() - 0.5) * (isChampion ? 220 : 90),
+            y: cy - 10,
+            vx: Math.cos(ang) * spd,
+            vy: Math.sin(ang) * spd - (isChampion ? 110 : 75),
+            w: 6 + Math.random() * 6,
+            h: 4 + Math.random() * 5,
+            rot: Math.random() * Math.PI * 2,
+            vRot: (Math.random() - 0.5) * 8.5,
+            color: colors[i % colors.length],
+            life: 1,
+            decay: isChampion ? 0.28 + Math.random() * 0.22 : 0.36 + Math.random() * 0.25
+          });
+        }
+        ensureRenderLoop();
+      }
+
+      function computeBlockHitboxes() {
+        const shift = state.coverShiftProgress;
+        const padX = Math.max(14, stageW * 0.04);
+        const gap = Math.max(10, stageW * 0.022);
+        const usableW = stageW - padX * 2 - gap * 3;
+        const baseBlockW = Math.min(195, usableW / 4);
+        const totalRowW = baseBlockW * 4 + gap * 3;
+        const startX = (stageW - totalRowW) / 2;
+
+        // Deep backward slide into perspective courtyard depth (~0.5x scale at full shift)
+        const baseGroundY = stageH * 0.86;
+        const horizonFloorY = stageH * 0.50;
+        const groundY = baseGroundY - shift * (baseGroundY - horizonFloorY);
+        const scale = 1 - shift * 0.5;
+
+        // Tall heavy architectural blocks with 2.5D depth
+        const baseBlockH = Math.min(220, Math.max(135, stageH * 0.44));
+        const blockH = baseBlockH * scale;
+        const depth3D = Math.min(38, Math.max(20, baseBlockW * 0.21)) * scale;
+
+        blockHitboxes = [];
+        for (let i = 0; i < 4; i++) {
+          const num = i + 1;
+          const hoverLift = (state.phase === 'HIDE' && state.hoveredBlock === num && !state.shatteredBlocks.has(num)) ? 10 : 0;
+          const centerX = startX + i * (baseBlockW + gap) + baseBlockW / 2;
+          const scaledW = baseBlockW * scale;
+          const x = centerX - scaledW / 2;
+          const y = groundY - blockH - hoverLift;
+
+          blockHitboxes.push({
+            num,
+            x,
+            y,
+            w: scaledW,
+            h: blockH,
+            depth: depth3D,
+            groundY,
+            scale
+          });
+        }
+      }
+
+      function fireTracerToBlock(blockNum, onImpact) {
+        computeBlockHitboxes();
+        const box = blockHitboxes[blockNum - 1];
+        const btnEl = els.shotButtons[blockNum - 1];
+
+        let startX = stageW * ((blockNum - 0.5) / 4);
+        const startY = stageH + 6;
+        if (btnEl) {
+          const stageRect = els.arenaStage.getBoundingClientRect();
+          const btnRect = btnEl.getBoundingClientRect();
+          startX = btnRect.left + btnRect.width / 2 - stageRect.left;
+        }
+
+        const targetX = box ? box.x + box.w / 2 : startX;
+        const targetY = box ? box.y + box.h * 0.55 : stageH * 0.55;
+
+        for (let i = 0; i < 16; i++) {
+          const ang = -Math.PI / 2 + (Math.random() - 0.5) * 1.1;
+          const spd = 90 + Math.random() * 240;
+          sparks.push({
+            x: startX,
+            y: stageH - 6,
+            vx: Math.cos(ang) * spd,
+            vy: Math.sin(ang) * spd,
+            size: 2.5 + Math.random() * 3.5,
+            color: Math.random() > 0.35 ? '#fde047' : '#f97316',
+            life: 1,
+            decay: 3.0 + Math.random() * 1.8
+          });
+        }
+
+        bullets.push({
+          x: startX,
+          y: stageH - 6,
+          startX,
+          startY,
+          targetX,
+          targetY,
+          progress: 0,
+          speed: 0.43, // Deliberate cinematic slow-motion flight (~2.3 seconds)
+          trail: [],
+          done: false,
+          onImpact
+        });
+        ensureRenderLoop();
+      }
+
+      function spawnStoneBreakage(box, fullShatter) {
+        triggerScreenQuake();
+        const cx = box.x + box.w / 2;
+        const cy = fullShatter ? box.y + box.h * 0.45 : box.y + box.h * 0.55;
+        const s = box.scale || 1;
+
+        const puffCount = fullShatter ? 24 : 11;
+        for (let i = 0; i < puffCount; i++) {
+          const ang = Math.random() * Math.PI * 2;
+          const spd = (fullShatter ? 55 : 30) + Math.random() * (fullShatter ? 180 : 90);
+          dustPuffs.push({
+            x: cx + (Math.random() - 0.5) * box.w * 0.7,
+            y: cy + (Math.random() - 0.5) * box.h * 0.5,
+            vx: Math.cos(ang) * spd,
+            vy: Math.sin(ang) * spd - 35,
+            radius: (fullShatter ? 14 : 8) + Math.random() * (fullShatter ? 24 : 12),
+            growth: 28 + Math.random() * 34,
+            alpha: 0.9,
+            decay: 1.15 + Math.random() * 0.7
+          });
+        }
+
+        const slabCount = fullShatter ? 16 : 6;
+        const palette = ['#e6dcc6', '#c9bca2', '#a89e8a', '#9e9076', '#f1eadc'];
+        for (let i = 0; i < slabCount; i++) {
+          const dir = Math.random() < 0.5 ? -1 : 1;
+          const vx = dir * ((fullShatter ? 52 : 30) + Math.random() * (fullShatter ? 145 : 75));
+          const vy = -(fullShatter ? 95 : 55) - Math.random() * (fullShatter ? 165 : 85);
+          slabs.push({
+            x: cx + (Math.random() - 0.5) * box.w * 0.6,
+            y: cy + (Math.random() - 0.5) * box.h * 0.4,
+            vx,
+            vy,
+            w: (fullShatter ? 14 : 8) + Math.random() * (fullShatter ? 18 : 10) * Math.max(0.6, s),
+            h: (fullShatter ? 10 : 6) + Math.random() * (fullShatter ? 13 : 8) * Math.max(0.6, s),
+            rot: Math.random() * Math.PI * 2,
+            vRot: (Math.random() - 0.5) * 7.5,
+            color: palette[i % palette.length],
+            floorY: box.groundY - 4,
+            bounced: false,
+            life: 1,
+            decay: 0.48 + Math.random() * 0.25
+          });
+        }
+      }
+
+      // --- Sunlit Alpine Villa Stone Courtyard & Distant Peaks ---
+      function drawTerraceBackground(dt) {
+        const horizonY = stageH * 0.43;
+
+        // Crisp daylight sky with warm alpine atmospheric haze
+        const skyGrad = ctx.createLinearGradient(0, 0, 0, horizonY + stageH * 0.08);
+        skyGrad.addColorStop(0, '#1e3a8a');
+        skyGrad.addColorStop(0.32, '#60a5fa');
+        skyGrad.addColorStop(0.72, '#dbeafe');
+        skyGrad.addColorStop(1, '#e2e8f0');
+        ctx.fillStyle = skyGrad;
+        ctx.fillRect(0, 0, stageW, horizonY + stageH * 0.08);
+
+        // Warm sun & soft atmospheric glow
+        const sunX = stageW * 0.82;
+        const sunY = stageH * 0.11;
+        const sunGlow = ctx.createRadialGradient(sunX, sunY, 8, sunX, sunY, Math.max(stageW, stageH) * 0.62);
+        sunGlow.addColorStop(0, 'rgba(239, 246, 255, 0.78)');
+        sunGlow.addColorStop(0.2, 'rgba(191, 219, 254, 0.25)');
+        sunGlow.addColorStop(0.6, 'rgba(219, 234, 254, 0.10)');
+        sunGlow.addColorStop(1, 'rgba(219, 234, 254, 0)');
+        ctx.fillStyle = sunGlow;
+        ctx.fillRect(0, 0, stageW, stageH * 0.88);
+
+        // Soft volumetric sun rays
+        ctx.save();
+        ctx.globalAlpha = 0.12;
+        for (let b = 0; b < 3; b++) {
+          ctx.beginPath();
+          ctx.moveTo(sunX, sunY);
+          ctx.lineTo(stageW * (0.08 + b * 0.25), stageH * 0.88);
+          ctx.lineTo(stageW * (0.24 + b * 0.25), stageH * 0.88);
+          ctx.closePath();
+          ctx.fillStyle = '#eff6ff';
+          ctx.fill();
+        }
+        ctx.restore();
+
+        // Distant alpine ridge (cool atmospheric blue-slate)
+        ctx.fillStyle = '#7da2c1';
+        ctx.beginPath();
+        ctx.moveTo(0, horizonY);
+        ctx.lineTo(stageW * 0.12, horizonY - stageH * 0.12);
+        ctx.lineTo(stageW * 0.25, horizonY - stageH * 0.06);
+        ctx.lineTo(stageW * 0.42, horizonY - stageH * 0.15);
+        ctx.lineTo(stageW * 0.58, horizonY - stageH * 0.07);
+        ctx.lineTo(stageW * 0.76, horizonY - stageH * 0.13);
+        ctx.lineTo(stageW * 0.91, horizonY - stageH * 0.06);
+        ctx.lineTo(stageW, horizonY - stageH * 0.10);
+        ctx.lineTo(stageW, horizonY);
+        ctx.closePath();
+        ctx.fill();
+
+        // Soft snow/sun highlight on alpine peaks
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+        ctx.beginPath();
+        ctx.moveTo(stageW * 0.42, horizonY - stageH * 0.15);
+        ctx.lineTo(stageW * 0.46, horizonY - stageH * 0.10);
+        ctx.lineTo(stageW * 0.38, horizonY - stageH * 0.10);
+        ctx.closePath();
+        ctx.fill();
+
+        // Mid-ground terraced hills
+        ctx.fillStyle = '#8ba6b8';
+        ctx.beginPath();
+        ctx.moveTo(0, horizonY);
+        ctx.quadraticCurveTo(stageW * 0.24, horizonY - stageH * 0.055, stageW * 0.52, horizonY - stageH * 0.025);
+        ctx.quadraticCurveTo(stageW * 0.78, horizonY - stageH * 0.065, stageW, horizonY - stageH * 0.02);
+        ctx.lineTo(stageW, horizonY);
+        ctx.closePath();
+        ctx.fill();
+
+        // Slender cypress tree silhouettes along villa edge
+        const cypressPositions = [0.07, 0.11, 0.89, 0.935];
+        cypressPositions.forEach((fx, idx) => {
+          const cx = stageW * fx;
+          const baseY = horizonY - stageH * 0.005;
+          const th = stageH * (idx % 2 === 0 ? 0.11 : 0.085);
+          const tw = Math.max(7, stageW * 0.014);
+
+          ctx.fillStyle = '#3f5e42';
+          ctx.beginPath();
+          ctx.moveTo(cx, baseY - th);
+          ctx.quadraticCurveTo(cx + tw * 1.1, baseY - th * 0.45, cx, baseY);
+          ctx.quadraticCurveTo(cx - tw * 1.1, baseY - th * 0.45, cx, baseY - th);
+          ctx.fill();
+        });
+
+        // Villa stone balustrade / parapet wall
+        const wallTopY = horizonY - 2;
+        const wallH = stageH * 0.052;
+        ctx.fillStyle = '#cbd5e1';
+        ctx.fillRect(0, wallTopY, stageW, wallH);
+
+        // Baluster posts along balustrade
+        ctx.fillStyle = '#94a3b8';
+        const postStep = Math.max(26, stageW * 0.042);
+        for (let x = postStep * 0.5; x < stageW; x += postStep) {
+          ctx.fillRect(x - 3, wallTopY + 3, 6, wallH - 4);
+        }
+
+        // Top marble coping cap
+        ctx.fillStyle = '#f1f5f9';
+        ctx.fillRect(0, wallTopY - 3, stageW, 4);
+        ctx.strokeStyle = 'rgba(115, 82, 46, 0.28)';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(0, wallTopY - 3, stageW, 4);
+
+        // Warm Sunlit Marble / Travertine Flagstone Courtyard Floor
+        const floorY = wallTopY + wallH;
+        const floorGrad = ctx.createLinearGradient(0, floorY, 0, stageH);
+        floorGrad.addColorStop(0, '#cbd5e1');
+        floorGrad.addColorStop(0.42, '#aebdce');
+        floorGrad.addColorStop(1, '#8295aa');
+        ctx.fillStyle = floorGrad;
+        ctx.fillRect(0, floorY, stageW, stageH - floorY);
+
+        // Perspective travertine flagstone joints & subtle stone variation
+        const rows = 6;
+        const vanishX = stageW * 0.5;
+        const vanishY = horizonY - stageH * 0.22;
+
+        for (let r = 0; r < rows; r++) {
+          const t0 = Math.pow(r / rows, 1.38);
+          const t1 = Math.pow((r + 1) / rows, 1.38);
+          const y0 = floorY + t0 * (stageH - floorY);
+          const y1 = floorY + t1 * (stageH - floorY);
+
+          // Horizontal mortar joint
+          ctx.strokeStyle = 'rgba(110, 78, 42, 0.22)';
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.moveTo(0, y1);
+          ctx.lineTo(stageW, y1);
+          ctx.stroke();
+
+          // Alternating flagstone subtle warmth
+          const cols = 8;
+          for (let c = 0; c < cols; c++) {
+            if ((r + c) % 3 === 0) {
+              const bx0 = (c / cols) * stageW;
+              const bx1 = ((c + 1) / cols) * stageW;
+              const tx0 = vanishX + (bx0 - vanishX) * (0.48 + t0 * 0.52);
+              const tx1 = vanishX + (bx1 - vanishX) * (0.48 + t0 * 0.52);
+              const mx0 = vanishX + (bx0 - vanishX) * (0.48 + t1 * 0.52);
+              const mx1 = vanishX + (bx1 - vanishX) * (0.48 + t1 * 0.52);
+
+              ctx.fillStyle = 'rgba(255, 250, 238, 0.22)';
+              ctx.beginPath();
+              ctx.moveTo(tx0, y0);
+              ctx.lineTo(tx1, y0);
+              ctx.lineTo(mx1, y1);
+              ctx.lineTo(mx0, y1);
+              ctx.closePath();
+              ctx.fill();
+            }
+          }
+        }
+
+        // Perspective vertical flagstone joints
+        const cols = 8;
+        ctx.strokeStyle = 'rgba(110, 78, 42, 0.18)';
+        ctx.lineWidth = 1.1;
+        for (let c = 1; c < cols; c++) {
+          const bx = (c / cols) * stageW;
+          ctx.beginPath();
+          ctx.moveTo(vanishX + (bx - vanishX) * 0.48, floorY);
+          ctx.lineTo(bx, stageH);
+          ctx.stroke();
+        }
+
+        // Drifting golden dust motes
+        ctx.save();
+        for (let i = 0; i < dustMotes.length; i++) {
+          const m = dustMotes[i];
+          m.x += m.vx * dt;
+          m.y += m.vy * dt;
+          if (m.x > stageW + 10) m.x = -10;
+          if (m.y < 10) m.y = stageH - 10;
+          if (m.y > stageH - 10) m.y = 10;
+
+          ctx.globalAlpha = m.alpha;
+          ctx.fillStyle = '#eff6ff';
+          ctx.beginPath();
+          ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+
+      // Draw fighter tucked/concealed or visibly revealed when found
+      function drawConcealedFighter(box, fighterId, peekAmount, isRevealed = false) {
+        const cx = box.x + box.w / 2;
+        const s = box.scale || 1;
+        // When found/revealed, the character steps/rises clearly into view so the player sees who was hiding
+        const peekY = isRevealed
+          ? box.y - 6 * s
+          : box.y + 4 * s + peekAmount * 14 * s;
+        const isRose = fighterId === 1;
+        const alpha = isRevealed ? 1 : Math.max(0.28, 1 - peekAmount * 0.68);
+
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.translate(cx, peekY);
+        ctx.scale(s, s);
+
+        // Highlight ring behind revealed character so they stand out clearly
+        if (isRevealed) {
+          ctx.fillStyle = 'rgba(254, 240, 138, 0.65)';
+          ctx.beginPath();
+          ctx.arc(0, -14, 26, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Shoulders
+        ctx.fillStyle = isRose ? '#e11d48' : '#0284c7';
+        ctx.beginPath();
+        ctx.roundRect(-18, -10, 36, 16, [8, 8, 2, 2]);
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#1e293b';
+        ctx.stroke();
+
+        // Head
+        ctx.fillStyle = '#fed7aa';
+        ctx.beginPath();
+        ctx.arc(0, -21, 12.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        // Cap / Helmet
+        ctx.fillStyle = isRose ? '#9f1239' : '#0369a1';
+        ctx.beginPath();
+        ctx.arc(0, -23, 12.5, Math.PI, 0);
+        ctx.fill();
+        ctx.stroke();
+
+        // Eyes
+        ctx.fillStyle = '#0f172a';
+        ctx.beginPath();
+        ctx.arc(-4.5, -20, 1.8, 0, Math.PI * 2);
+        ctx.arc(4.5, -20, 1.8, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      }
+
+      // Deterministic pseudo-random helper for crisp granite/limestone mineral grain
+      function seededNoise(seed) {
+        const x = Math.sin(seed * 12.9898 + 78.233) * 43758.5453;
+        return x - Math.floor(x);
+      }
+
+      function drawTallStoneBlock(box) {
+        const { num, x, y, w, h, depth, groundY } = box;
+        const s = box.scale || 1;
+        const isShattered = state.shatteredBlocks.has(num);
+        const isCracked = state.crackedBlocks.has(num);
+        const isHovered = state.phase === 'HIDE' && state.hoveredBlock === num && !isShattered;
+        const isSelectedByHider = state.hiddenBlock === num;
+
+        // Ambient occlusion & ground contact shadow
+        ctx.fillStyle = isShattered ? 'rgba(78, 54, 20, 0.14)' : 'rgba(78, 54, 20, 0.36)';
+        // Show fighter tucked/concealed when hiding player picks this block, or clearly revealed once found
+        const showHider =
+          isSelectedByHider &&
+          (state.phase === 'TUCKING' || state.phase === 'HANDOFF' || state.phase === 'ROUND_END' || state.foundCharacter);
+
+        if (showHider && !isShattered) {
+          drawConcealedFighter(box, state.hiderId, state.hidePeekProgress, state.foundCharacter || state.phase === 'ROUND_END');
+        }
+
+        if (isShattered) {
+          // Low shattered base rubble
+          const stumpH = h * 0.18;
+          const stumpY = groundY - stumpH;
+          ctx.fillStyle = '#a89f8d';
+          ctx.beginPath();
+          ctx.roundRect(x + w * 0.12, stumpY, w * 0.76, stumpH, 4 * s);
+          ctx.fill();
+          ctx.lineWidth = Math.max(1.2, 2 * s);
+          ctx.strokeStyle = '#57534e';
+          ctx.stroke();
+
+          // Show the found character standing clearly above the broken block rubble
+          if (isSelectedByHider && (state.foundCharacter || state.phase === 'ROUND_END')) {
+            drawConcealedFighter(box, state.hiderId, 0, true);
+          }
+          return;
+        }
+
+        const dx = depth * 0.72;
+        const dy = depth * 0.58;
+
+        // 2.5D Top Bevel Face (sun-lit limestone/granite)
+        ctx.fillStyle = isHovered ? '#fcfaf5' : '#f1eadc';
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + dx, y - dy);
+        ctx.lineTo(x + w + dx, y - dy);
+        ctx.lineTo(x + w, y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.lineWidth = Math.max(1.2, 1.8 * s);
+        ctx.strokeStyle = '#57534e';
+        ctx.stroke();
+
+        // 2.5D Right Side Face (shaded architectural granite/limestone)
+        const sideGrad = ctx.createLinearGradient(x + w, y, x + w + dx, y + h);
+        sideGrad.addColorStop(0, '#a89e8a');
+        sideGrad.addColorStop(1, '#857b68');
+        ctx.fillStyle = sideGrad;
+        ctx.beginPath();
+        ctx.moveTo(x + w, y);
+        ctx.lineTo(x + w + dx, y - dy);
+        ctx.lineTo(x + w + dx, y + h - dy);
+        ctx.lineTo(x + w, y + h);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Front Tall Heavy Stone Face
+        const radius = Math.max(4, 8 * s);
+        const faceGrad = ctx.createLinearGradient(x, y, x + w, y + h);
+        faceGrad.addColorStop(0, isHovered ? '#f7f1e5' : '#e6dcc6');
+        faceGrad.addColorStop(0.55, '#c9bca2');
+        faceGrad.addColorStop(1, '#9e9076');
+        ctx.fillStyle = faceGrad;
+        ctx.beginPath();
+        ctx.roundRect(x, y, w, h, radius);
+        ctx.fill();
+
+        // Clip inside front face for granite/limestone mineral grain & mortar seams
+        ctx.save();
+        ctx.beginPath();
+        ctx.roundRect(x, y, w, h, radius);
+        ctx.clip();
+
+        // Subtle top-left bevel highlight & bottom-right ambient occlusion
+        ctx.strokeStyle = 'rgba(255, 253, 247, 0.55)';
+        ctx.lineWidth = Math.max(1.5, 2.5 * s);
+        ctx.beginPath();
+        ctx.moveTo(x + 2, y + h - 2);
+        ctx.lineTo(x + 2, y + 2);
+        ctx.lineTo(x + w - 2, y + 2);
+        ctx.stroke();
+
+        // Granite speckles & mineral grain
+        const speckCount = 26;
+        for (let i = 0; i < speckCount; i++) {
+          const n1 = seededNoise(num * 100 + i * 3 + 1);
+          const n2 = seededNoise(num * 100 + i * 3 + 2);
+          const n3 = seededNoise(num * 100 + i * 3 + 3);
+          const sx = x + n1 * w;
+          const sy = y + n2 * h;
+          const sr = Math.max(1, (1.2 + n3 * 2.2) * s);
+          ctx.fillStyle = n3 > 0.5 ? 'rgba(68, 64, 60, 0.22)' : 'rgba(255, 252, 245, 0.24)';
+          ctx.beginPath();
+          ctx.arc(sx, sy, sr, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Architectural stone courses / mortar joints
+        ctx.strokeStyle = 'rgba(56, 51, 46, 0.34)';
+        ctx.lineWidth = Math.max(1, 1.5 * s);
+        [0.25, 0.5, 0.75].forEach((frac, idx) => {
+          const lineY = y + h * frac;
+          ctx.beginPath();
+          ctx.moveTo(x, lineY);
+          ctx.lineTo(x + w, lineY);
+          ctx.stroke();
+
+          // Staggered vertical block joint
+          const jointX = x + w * (idx % 2 === 0 ? 0.34 : 0.66);
+          const prevY = y + h * (frac - 0.25);
+          ctx.beginPath();
+          ctx.moveTo(jointX, prevY);
+          ctx.lineTo(jointX, lineY);
+          ctx.stroke();
+        });
+
+        ctx.restore();
+
+        // Outer border stroke
+        ctx.lineWidth = isHovered ? 3 : Math.max(1.4, 2.2 * s);
+        ctx.strokeStyle = isHovered ? '#d97706' : isCracked ? '#e11d48' : '#44403c';
+        ctx.beginPath();
+        ctx.roundRect(x, y, w, h, radius);
+        ctx.stroke();
+
+        // Subtle concealed indicator badge when hider tucked inside during handoff
+        if (showHider && state.phase === 'HANDOFF') {
+          ctx.fillStyle = state.hiderId === 1 ? '#e11d48' : '#0284c7';
+          ctx.beginPath();
+          ctx.arc(x + w - 12 * s, y + 12 * s, Math.max(3, 5 * s), 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Fracture cracks if hit once
+        if (isCracked) {
+          ctx.strokeStyle = '#292524';
+          ctx.lineWidth = Math.max(1.5, 2.5 * s);
+          ctx.beginPath();
+          ctx.moveTo(x + w * 0.25, y + 8 * s);
+          ctx.lineTo(x + w * 0.45, y + h * 0.32);
+          ctx.lineTo(x + w * 0.3, y + h * 0.62);
+          ctx.lineTo(x + w * 0.58, y + h - 8 * s);
+          ctx.stroke();
+        }
+
+        // Clean Block Number
+        ctx.fillStyle = '#1c1917';
+        ctx.font = `700 ${Math.max(13, Math.min(36, Math.floor(w * 0.26)))}px "Chakra Petch", sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(String(num), x + w / 2, y + h * 0.52);
+      }
+
+      function renderFrame(now) {
+        const dt = Math.min(0.05, Math.max(0.001, (now - lastTime) / 1000));
+        lastTime = now;
+        const fxDt = dt * (now < cinematicUntil ? 0.42 : 1);
+
+        // Smooth, slow backward cover shift
+        const shiftDiff = state.targetCoverShift - state.coverShiftProgress;
+        if (Math.abs(shiftDiff) > 0.001) {
+          state.coverShiftProgress += shiftDiff * Math.min(1, dt * 2.6);
+        } else {
+          state.coverShiftProgress = state.targetCoverShift;
+        }
+
+        // Smooth tuck-in animation progress
+        if (state.phase === 'TUCKING' || state.phase === 'HANDOFF') {
+          state.hidePeekProgress += (1 - state.hidePeekProgress) * Math.min(1, dt * 2.8);
+        } else if (state.foundCharacter || state.phase === 'ROUND_END') {
+          state.hidePeekProgress += (0 - state.hidePeekProgress) * Math.min(1, dt * 3.0);
+        } else {
+          state.hidePeekProgress = 0;
+        }
+
+        computeBlockHitboxes();
+        ctx.clearRect(0, 0, stageW, stageH);
+
+        drawTerraceBackground(dt);
+        blockHitboxes.forEach(drawTallStoneBlock);
+
+        // Flying stone slabs
+        for (let i = slabs.length - 1; i >= 0; i--) {
+          const s = slabs[i];
+          s.x += s.vx * fxDt;
+          s.y += s.vy * fxDt;
+          s.vy += 460 * fxDt;
+          s.rot += s.vRot * fxDt;
+
+          if (s.y >= s.floorY) {
+            s.y = s.floorY;
+            if (!s.bounced) {
+              s.bounced = true;
+              s.vy = -Math.abs(s.vy) * 0.32;
+              s.vx *= 0.65;
+              s.vRot *= 0.55;
+            } else {
+              s.vy = 0;
+              s.vx *= 0.8;
+              s.vRot = 0;
+            }
+          }
+
+          s.life -= s.decay * fxDt;
+          if (s.life <= 0) {
+            slabs.splice(i, 1);
+            continue;
+          }
+
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, Math.min(1, s.life * 1.25));
+          ctx.translate(s.x, s.y);
+          ctx.rotate(s.rot);
+          ctx.fillStyle = s.color;
+          ctx.beginPath();
+          ctx.roundRect(-s.w / 2, -s.h / 2, s.w, s.h, 3);
+          ctx.fill();
+          ctx.lineWidth = 1.5;
+          ctx.strokeStyle = '#44403c';
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // Dust clouds
+        for (let i = dustPuffs.length - 1; i >= 0; i--) {
+          const d = dustPuffs[i];
+          d.x += d.vx * fxDt;
+          d.y += d.vy * fxDt;
+          d.vx *= 0.96;
+          d.vy *= 0.96;
+          d.radius += d.growth * fxDt;
+          d.alpha -= d.decay * fxDt;
+
+          if (d.alpha <= 0) {
+            dustPuffs.splice(i, 1);
+            continue;
+          }
+
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, d.alpha * 0.62);
+          ctx.fillStyle = '#efe1c6';
+          ctx.beginPath();
+          ctx.arc(d.x, d.y, d.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        // Tracer bullets (smooth, steady travel)
+        for (let i = bullets.length - 1; i >= 0; i--) {
+          const b = bullets[i];
+          b.trail.push({ x: b.x, y: b.y });
+          if (b.trail.length > 26) b.trail.shift();
+
+          b.progress = Math.min(1, b.progress + b.speed * dt);
+          // Smoothstep acceleration/deceleration gives the shot a cinematic glide.
+          const eased = b.progress * b.progress * (3 - 2 * b.progress);
+          b.x = b.startX + (b.targetX - b.startX) * eased;
+          b.y = b.startY + (b.targetY - b.startY) * eased;
+
+          if (b.trail.length > 1) {
+            ctx.beginPath();
+            ctx.moveTo(b.trail[0].x, b.trail[0].y);
+            for (let j = 1; j < b.trail.length; j++) {
+              ctx.lineTo(b.trail[j].x, b.trail[j].y);
+            }
+            ctx.lineTo(b.x, b.y);
+            ctx.save();
+            ctx.shadowColor = '#38bdf8';
+            ctx.shadowBlur = 20;
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.96)';
+            ctx.lineWidth = 5.5;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+            ctx.restore();
+          }
+
+          ctx.save();
+          ctx.shadowColor = '#38bdf8';
+          ctx.shadowBlur = 24;
+          ctx.beginPath();
+          ctx.arc(b.x, b.y, 7, 0, Math.PI * 2);
+          ctx.fillStyle = '#ffffff';
+          ctx.fill();
+          ctx.lineWidth = 2.5;
+          ctx.strokeStyle = '#0284c7';
+          ctx.stroke();
+          ctx.restore();
+
+          if (b.progress >= 1 && !b.done) {
+            b.done = true;
+            const cb = b.onImpact;
+            bullets.splice(i, 1);
+            cinematicUntil = performance.now() + 520;
+            if (typeof cb === 'function') cb(b.targetX, b.targetY);
+          }
+        }
+
+        // Sparks
+        for (let i = sparks.length - 1; i >= 0; i--) {
+          const sp = sparks[i];
+          sp.x += sp.vx * fxDt;
+          sp.y += sp.vy * fxDt;
+          sp.vy += 320 * fxDt;
+          sp.life -= sp.decay * fxDt;
+
+          if (sp.life <= 0) {
+            sparks.splice(i, 1);
+            continue;
+          }
+
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, sp.life);
+          ctx.fillStyle = sp.color;
+          ctx.fillRect(sp.x - sp.size / 2, sp.y - sp.size / 2, sp.size, sp.size);
+          ctx.restore();
+        }
+
+        // Win celebration confetti
+        for (let i = confetti.length - 1; i >= 0; i--) {
+          const c = confetti[i];
+          c.x += c.vx * dt;
+          c.y += c.vy * dt;
+          c.vy += 240 * dt;
+          c.vx *= 0.99;
+          c.rot += c.vRot * dt;
+          c.life -= c.decay * dt;
+
+          if (c.life <= 0) {
+            confetti.splice(i, 1);
+            continue;
+          }
+
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, c.life);
+          ctx.translate(c.x, c.y);
+          ctx.rotate(c.rot);
+          ctx.fillStyle = c.color;
+          ctx.fillRect(-c.w / 2, -c.h / 2, c.w, c.h);
+          ctx.restore();
+        }
+
+        const stillAnimating =
+          state.phase === 'TUCKING' ||
+          Math.abs(state.targetCoverShift - state.coverShiftProgress) > 0.001 ||
+          bullets.length > 0 ||
+          slabs.length > 0 ||
+          dustPuffs.length > 0 ||
+          sparks.length > 0 ||
+          confetti.length > 0 ||
+          dustMotes.length > 0;
+
+        if (stillAnimating) {
+          animLoopId = requestAnimationFrame(renderFrame);
+        } else {
+          animLoopId = null;
+        }
+      }
+
+      function ensureRenderLoop() {
+        if (!animLoopId) {
+          lastTime = performance.now();
+          animLoopId = requestAnimationFrame(renderFrame);
+        }
+      }
+
+      function getCanvasCoords(clientX, clientY) {
+        const rect = els.arenaCanvas.getBoundingClientRect();
+        return {
+          x: clientX - rect.left,
+          y: clientY - rect.top
+        };
+      }
+
+      function hitTestBlock(x, y) {
+        for (let i = 0; i < blockHitboxes.length; i++) {
+          const b = blockHitboxes[i];
+          if (x >= b.x - 6 && x <= b.x + b.w + 6 && y >= b.y - 12 && y <= b.groundY + 8) {
+            return b.num;
+          }
+        }
+        return null;
+      }
+
+      // =========================================================================
+      // 5. TOAST HELPER
+      // =========================================================================
+      function showToast(msg, tone = 'info') {
+        const item = document.createElement('div');
+        const styles = {
+          info: 'bg-amber-50/95 border-amber-700/40 text-slate-900',
+          miss: 'bg-rose-50/95 border-rose-500/60 text-rose-950',
+          win: 'bg-emerald-50/95 border-emerald-600/60 text-emerald-950'
+        };
+        item.className = `px-3.5 py-1.5 rounded-xl border text-xs font-bold shadow-lg backdrop-blur-md animate-pop-in ${styles[tone] || styles.info}`;
+        item.textContent = msg;
+        els.toastContainer.appendChild(item);
+
+        setTimeout(() => {
+          item.style.opacity = '0';
+          item.style.transform = 'translateY(-6px)';
+          item.style.transition = 'opacity 200ms ease, transform 200ms ease';
+          setTimeout(() => item.remove(), 220);
+        }, 1600);
+      }
+
+      // =========================================================================
+      // 6. GAME LOOP & ROUND LOGIC
+      // =========================================================================
+      function getPlayerName(id) {
+        return state.players[id]?.name?.trim() || `Player ${id}`;
+      }
+
+      function onBlockSelect(blockNum) {
+        if (state.phase !== 'HIDE') return;
+        audio.playCoverShift();
+        state.hiddenBlock = blockNum;
+        state.foundCharacter = false;
+        state.targetCoverShift = 1;
+        state.hoveredBlock = null;
+        state.phase = 'TUCKING';
+        ensureRenderLoop();
+        renderAll();
+
+        // Smooth, unhurried tuck-in into the selected block before pass-the-screen handoff
+        setTimeout(() => {
+          if (state.phase === 'TUCKING') {
+            state.phase = 'HANDOFF';
+            renderAll();
+          }
+        }, 1250);
+      }
+
+      function startShooting() {
+        if (state.phase !== 'HANDOFF') return;
+        audio.playClick();
+        state.phase = 'SHOOT';
+        renderAll();
+      }
+
+      function onFireBlock(blockNum) {
+        if (state.phase !== 'SHOOT' || state.chancesLeft <= 0) return;
+
+        if (state.shatteredBlocks.has(blockNum)) {
+          showToast(`Block ${blockNum} broken`, 'miss');
+          return;
+        }
+
+        state.phase = 'ANIMATING';
+        state.chancesLeft -= 1;
+        renderAll();
+
+        audio.playGunshot();
+
+        const isHit = blockNum === state.hiddenBlock;
+
+        fireTracerToBlock(blockNum, (ix, iy) => {
+          const box = blockHitboxes[blockNum - 1];
+
+          if (isHit) {
+            audio.playStoneShatter();
+            state.shatteredBlocks.add(blockNum);
+            state.foundCharacter = true; // Character is found and shown!
+            if (box) spawnStoneBreakage(box, true);
+            const willWinMatch = state.players[state.shooterId].score + 1 >= TARGET_WINS;
+            triggerWinCelebration(ix, iy, willWinMatch);
+            ensureRenderLoop();
+
+            // Give plenty of time to see the found character revealed on the broken block
+            setTimeout(() => {
+              concludeRound({ winnerId: state.shooterId });
+            }, 1950);
+          } else {
+            audio.playStoneCrack();
+            state.crackedBlocks.add(blockNum);
+            if (box) spawnStoneBreakage(box, false);
+            ensureRenderLoop();
+
+            if (state.chancesLeft > 0) {
+              setTimeout(() => {
+                if (state.phase === 'ANIMATING') {
+                  showToast(`Miss #${blockNum}`, 'miss');
+                  state.phase = 'SHOOT';
+                  renderAll();
+                }
+              }, 850);
+            } else {
+              // Reveal who was hiding behind their block when shots run out
+              state.foundCharacter = true;
+              ensureRenderLoop();
+              setTimeout(() => {
+                concludeRound({ winnerId: state.hiderId });
+              }, 1850);
+            }
+          }
+        });
+      }
+
+      function concludeRound(outcome) {
+        state.lastRoundOutcome = outcome;
+        state.players[outcome.winnerId].score += 1;
+
+        const isChampion = state.players[outcome.winnerId].score >= TARGET_WINS;
+        if (isChampion) {
+          state.matchWinnerId = outcome.winnerId;
+          triggerWinCelebration(stageW * 0.5, stageH * 0.45, true);
+        }
+
+        audio.playWinFanfare();
+        state.phase = 'ROUND_END';
+        ensureRenderLoop();
+        renderAll();
+      }
+
+      function nextRound() {
+        audio.playClick();
+        state.round += 1;
+        state.hiderId = state.round % 2 === 1 ? 1 : 2;
+        state.shooterId = state.hiderId === 1 ? 2 : 1;
+
+        state.phase = 'HIDE';
+        state.hiddenBlock = null;
+        state.foundCharacter = false;
+        state.hidePeekProgress = 0;
+        state.targetCoverShift = 0;
+        state.hoveredBlock = null;
+        state.crackedBlocks.clear();
+        state.shatteredBlocks.clear();
+        state.chancesLeft = MAX_CHANCES;
+        state.lastRoundOutcome = null;
+        state.matchWinnerId = null;
+
+        ensureRenderLoop();
+        renderAll();
+      }
+
+      function resetMatch() {
+        audio.playClick();
+        state.players[1].score = 0;
+        state.players[2].score = 0;
+        state.round = 0;
+        nextRound();
+      }
+
+      // =========================================================================
+      // 7. UI RENDERING
+      // =========================================================================
+      function renderAll() {
+        const p1Name = getPlayerName(1);
+        const p2Name = getPlayerName(2);
+        const hiderName = getPlayerName(state.hiderId);
+        const shooterName = getPlayerName(state.shooterId);
+
+        els.roundBadge.textContent = `R${state.round}`;
+        els.targetWinsDisplay.textContent = String(TARGET_WINS);
+        els.p1Score.textContent = String(state.players[1].score);
+        els.p2Score.textContent = String(state.players[2].score);
+
+        els.p1RoleTag.textContent = state.hiderId === 1 ? 'HIDE' : 'SHOOT';
+        els.p1RoleTag.className = `text-[9px] font-display font-bold uppercase tracking-wider px-1.5 py-0.2 rounded inline-block ${
+          state.hiderId === 1 ? 'bg-sky-100 text-sky-900' : 'bg-amber-200 text-amber-950'
+        }`;
+
+        els.p2RoleTag.textContent = state.hiderId === 2 ? 'HIDE' : 'SHOOT';
+        els.p2RoleTag.className = `text-[9px] font-display font-bold uppercase tracking-wider px-1.5 py-0.2 rounded inline-block ${
+          state.hiderId === 2 ? 'bg-sky-100 text-sky-900' : 'bg-amber-200 text-amber-950'
+        }`;
+
+        const activeId = state.phase === 'HIDE' || state.phase === 'TUCKING' ? state.hiderId : state.shooterId;
+        els.p1Card.classList.toggle('border-amber-600', activeId === 1);
+        els.p1Card.classList.toggle('border-amber-900/15', activeId !== 1);
+        els.p2Card.classList.toggle('border-amber-600', activeId === 2);
+        els.p2Card.classList.toggle('border-amber-900/15', activeId !== 2);
+
+        els.chancesText.textContent = String(state.chancesLeft);
+        els.chanceDot1.className = `w-4 h-2 rounded-full transition-all ${
+          state.chancesLeft >= 1 ? 'bg-amber-500' : 'bg-amber-950/15'
+        }`;
+        els.chanceDot2.className = `w-4 h-2 rounded-full transition-all ${
+          state.chancesLeft >= 2 ? 'bg-amber-500' : 'bg-amber-950/15'
+        }`;
+
+        if (state.phase === 'HIDE' || state.phase === 'TUCKING') {
+          els.phasePill.textContent = 'HIDE';
+          els.phasePill.className = 'px-2 py-0.5 rounded-md text-[10px] font-display font-bold tracking-wider uppercase bg-sky-600 text-white shrink-0';
+          els.statusPrompt.textContent = `${hiderName}: Pick Block 1–4`;
+        } else if (state.phase === 'HANDOFF') {
+          els.phasePill.textContent = 'COVER';
+          els.phasePill.className = 'px-2 py-0.5 rounded-md text-[10px] font-display font-bold tracking-wider uppercase bg-amber-600 text-white shrink-0';
+          els.statusPrompt.textContent = `${shooterName}: Ready`;
+        } else if (state.phase === 'SHOOT') {
+          els.phasePill.textContent = 'SHOOT';
+          els.phasePill.className = 'px-2 py-0.5 rounded-md text-[10px] font-display font-bold tracking-wider uppercase bg-orange-600 text-white shrink-0';
+          els.statusPrompt.textContent = `${shooterName}: Fire 1–4`;
+        } else if (state.phase === 'ANIMATING') {
+          els.phasePill.textContent = 'FIRE';
+          els.phasePill.className = 'px-2 py-0.5 rounded-md text-[10px] font-display font-bold tracking-wider uppercase bg-rose-600 text-white shrink-0';
+          els.statusPrompt.textContent = shooterName;
+        } else if (state.phase === 'ROUND_END') {
+          els.phasePill.textContent = 'WIN';
+          els.phasePill.className = 'px-2 py-0.5 rounded-md text-[10px] font-display font-bold tracking-wider uppercase bg-emerald-600 text-white shrink-0';
+          els.statusPrompt.textContent = `${getPlayerName(state.lastRoundOutcome.winnerId)} Wins`;
+        }
+
+        const canShoot = state.phase === 'SHOOT' && state.chancesLeft > 0;
+        els.shotButtons.forEach((btn, idx) => {
+          const bNum = idx + 1;
+          const isCracked = state.crackedBlocks.has(bNum);
+          const isShattered = state.shatteredBlocks.has(bNum);
+          btn.disabled = !canShoot || isCracked || isShattered;
+          btn.classList.toggle('shot-missed', isCracked);
+          btn.classList.toggle('shot-hit', isShattered);
+        });
+
+        els.handoffOverlay.classList.toggle('hidden', state.phase !== 'HANDOFF');
+        if (state.phase === 'HANDOFF') {
+          els.handoffTitle.textContent = `${shooterName}'s Turn`;
+        }
+
+        const showRoundEnd = state.phase === 'ROUND_END' && state.lastRoundOutcome;
+        els.roundResultOverlay.classList.toggle('hidden', !showRoundEnd);
+        if (showRoundEnd) {
+          const { winnerId } = state.lastRoundOutcome;
+          const winnerName = getPlayerName(winnerId);
+          const matchOver = state.matchWinnerId !== null;
+
+          const winCard = document.getElementById('win-card');
+          winCard.classList.toggle('champion-card-glow', matchOver);
+
+          els.roundOutcomeBadge.textContent = matchOver ? `3 WINS • CHAMPION` : 'ROUND WIN';
+          els.roundWinnerHeading.textContent = matchOver ? `${winnerName} Champion!` : `${winnerName} Wins!`;
+          els.btnNextRound.classList.toggle('hidden', matchOver);
+          els.btnRematch.classList.toggle('hidden', !matchOver);
+
+          els.summaryP1Label.textContent = p1Name;
+          els.summaryP2Label.textContent = p2Name;
+          els.summaryP1Score.textContent = String(state.players[1].score);
+          els.summaryP2Score.textContent = String(state.players[2].score);
+        }
+      }
+
+      // =========================================================================
+      // 8. EVENTS
+      // =========================================================================
+      function bindEvents() {
+        els.p1NameInput.addEventListener('input', (e) => {
+          state.players[1].name = e.target.value;
+          renderAll();
+        });
+        els.p1NameInput.addEventListener('blur', () => {
+          if (!state.players[1].name.trim()) {
+            state.players[1].name = 'Player 1';
+            els.p1NameInput.value = 'Player 1';
+          }
+          renderAll();
+        });
+
+        els.p2NameInput.addEventListener('input', (e) => {
+          state.players[2].name = e.target.value;
+          renderAll();
+        });
+        els.p2NameInput.addEventListener('blur', () => {
+          if (!state.players[2].name.trim()) {
+            state.players[2].name = 'Player 2';
+            els.p2NameInput.value = 'Player 2';
+          }
+          renderAll();
+        });
+
+        els.arenaCanvas.addEventListener('mousemove', (e) => {
+          if (state.phase !== 'HIDE') {
+            if (state.hoveredBlock !== null) {
+              state.hoveredBlock = null;
+              ensureRenderLoop();
+            }
+            return;
+          }
+          const pt = getCanvasCoords(e.clientX, e.clientY);
+          const hit = hitTestBlock(pt.x, pt.y);
+          if (hit !== state.hoveredBlock) {
+            state.hoveredBlock = hit;
+            ensureRenderLoop();
+          }
+        });
+
+        els.arenaCanvas.addEventListener('mouseleave', () => {
+          if (state.hoveredBlock !== null) {
+            state.hoveredBlock = null;
+            ensureRenderLoop();
+          }
+        });
+
+        els.arenaCanvas.addEventListener('click', (e) => {
+          if (state.phase !== 'HIDE') return;
+          const pt = getCanvasCoords(e.clientX, e.clientY);
+          const hit = hitTestBlock(pt.x, pt.y);
+          if (hit) onBlockSelect(hit);
+        });
+
+        els.shotButtons.forEach((btn, idx) => {
+          btn.addEventListener('click', () => onFireBlock(idx + 1));
+        });
+
+        els.btnStartShooting.addEventListener('click', startShooting);
+        els.btnNextRound.addEventListener('click', nextRound);
+        els.btnRematch.addEventListener('click', resetMatch);
+        els.btnResetMatch.addEventListener('click', resetMatch);
+
+        els.btnSound.addEventListener('click', () => {
+          audio.muted = !audio.muted;
+          els.iconSoundOn.classList.toggle('hidden', audio.muted);
+          els.iconSoundOff.classList.toggle('hidden', !audio.muted);
+          if (!audio.muted) audio.playClick();
+        });
+
+        window.addEventListener('keydown', (e) => {
+          const tag = document.activeElement?.tagName;
+          if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+
+          if (state.phase === 'SHOOT' && ['1', '2', '3', '4'].includes(e.key)) {
+            onFireBlock(Number(e.key));
+          }
+        });
+
+        window.addEventListener('resize', resizeCanvas);
+      }
+
+      window.addEventListener('DOMContentLoaded', () => {
+        bindEvents();
+        resizeCanvas();
+        renderAll();
+      });
+    })();
+  </script>
+</body>
+</html>

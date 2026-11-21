@@ -1,0 +1,41 @@
+PUNJABI GAME ARENA — SLOW LIVE-CAST COMBAT UPDATE
+
+PRESERVED GAMEPLAY
+- Two-player turn-based power selection remains unchanged.
+- Player 1 chooses first; Player 2 chooses second.
+- Player 1's choice remains hidden while Player 2 is selecting.
+- Both locked powers resolve only when the existing ATTACK button is pressed.
+- Existing health, power-strength, shield, healing, round, rematch, winner, player-name and hero-selection flows are retained.
+- No keyboard or real-time free-roam controls have been added.
+- The arena background, fighter artwork, and power artwork files are retained.
+
+NEW ATTACK CHOREOGRAPHY
+The locked round now plays for approximately 8.25 seconds:
+1. CHARGE (0–1.05s): energy begins gathering at each fighter's hand.
+2. WIND-UP (1.05–2.45s): the action pose fades in gradually; hand energy builds and pulses.
+3. RELEASE (2.45–4.25s): selected power artwork leaves the hand and travels toward the centre.
+4. COLLISION (4.25–5.15s): both powers compress into a central energy collision.
+5. BREAKTHROUGH (5.15–6.10s): the losing power collapses and the winning power surges forward.
+6. IMPACT (6.25s): the target receives a hit burst, recoil/knockback, damage number and camera impact.
+7. RECOVERY (7.20–8.25s): effects settle before the existing round result and NEXT ROUND control appear.
+
+VISUAL DETAILS
+- Fighter action sprites fade over the idle pose instead of appearing as an abrupt image swap.
+- Hand charge rings and cores make the power origin visible.
+- All 16 selected-power artwork assets remain individually mapped.
+- Projectile placement is narrower and aligned with the hand-to-centre path rather than spanning most of the arena.
+- The stage background and original characters are not replaced.
+
+FILES CHANGED
+- src/components/SuperheroClash.tsx
+- src/style.css
+
+VALIDATION
+- Updated component TSX transpilation: passed with zero diagnostics.
+- Local TypeScript component check with temporary React/icon declarations: passed (the only strict-mode warnings were caused by missing JSX event contextual types in those temporary stubs).
+- CSS parser validation: passed.
+- All 16 power effect image files and required fighter action images: present.
+- ZIP integrity: verified after packaging.
+
+LIMITATION
+A full Vite production build and live browser/device frame-rate test could not be completed because npm dependency installation timed out. Static checks are not a measured performance benchmark. The animation sequence is CSS/React-driven and adds no new runtime package dependency.

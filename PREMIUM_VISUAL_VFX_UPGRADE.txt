@@ -1,0 +1,34 @@
+PUNJABI GAME ARENA — PREMIUM VISUAL VFX UPGRADE
+
+Purpose
+This update addresses the thin flat beam / generic vector-effect appearance seen in the user's latest screenshot. It changes the combat presentation only; turn-based rules and arena layout remain intact.
+
+What changed
+- Replaced the thin CSS breakthrough line with the actual selected-power VFX texture rendered through the live Canvas engine.
+- All 16 power VFX assets are preloaded when the arena opens and reused from an image cache.
+- Textures are rendered continuously by requestAnimationFrame, not swapped as DOM images. The Canvas applies continuous position, scale pulse, rotation, direction mirroring, brightness/saturation, additive light, and alpha over time.
+- Each attack uses its own artwork: fire, lightning, ice, shadow, solar, wind, shield, impact, plasma, speed, water dragon, water vortex, phoenix, frost nova, guardian aegis, and mend aura.
+- Power charge now shows the selected power's own texture gathering at the fighter's hand.
+- The projectile texture travels from the fighter toward the centre, then the winning texture travels from the collision point to the opponent.
+- Impact layers the impact artwork with a radial shockwave and emitted sparks.
+- Fire wake now uses ember particles rather than a simple straight coloured line. Other elemental wakes retain their specialized particle / arc behaviour.
+- The old CSS breakthrough beam, target-burst and hit-spark overlays are hidden during clash to avoid the thin-line look and duplicate flat effects.
+- Canvas is layered above the fighters for clear projectile visibility while the HUD/impact label remains above it.
+
+Preserved
+- Existing 2-player turn-based power selection.
+- Player 1 then Player 2 selection order and hidden first selection.
+- Name editing, hero selection, ATTACK button, round progression, health/damage rules, shield/heal logic, winner and rematch flow.
+- Existing character art and arena background.
+- No keyboard or free-roam controls.
+
+Changed files
+- src/components/SuperheroClash.tsx
+- src/style.css
+
+Validation
+- TSX transpilation: 0 diagnostics.
+- CSS parser: passed.
+- All 16 referenced effect textures verified present.
+- ZIP integrity checked after packaging.
+- A dependency-backed Vite production build and live browser FPS test could not be completed because npm dependency installation timed out. Do not treat syntax checks as a production-build or device-performance certification.
